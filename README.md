@@ -11,9 +11,11 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+`AutoHyphenatingText` is a drop in replacement for the default `Text` that supports autohyphenating text.
 
+![Demo](https://media4.giphy.com/media/iAfRO9amZZNe8MwFG1/giphy.gif)
+
+<!--
 ## Features
 
 TODO: List what your package can do. Maybe include images, gifs, or videos.
@@ -22,18 +24,36 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 TODO: List prerequisites and provide or point to information on how to
 start using the package.
+-->
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+This package needs to be initialized using the following:
 
 ```dart
-const like = 'sample';
+await initHyphenation();
 ```
+
+This will load the hyphenation algorithm. Alternately you can not do this and specify the resource file manually every time you call `AutoHyphenatingText`.
+
+Then it can be used as a drop in replacement for normal text. So
+
+```dart
+Text("abc");
+```
+
+becomes
+
+```dart
+AutoHyphenatingText("abc");
+```
+
+<!--
 
 ## Additional information
 
 TODO: Tell users more about the package: where to find more information, how to
 contribute to the package, how to file issues, what response they can expect
 from the package authors, and more.
+
+-->
