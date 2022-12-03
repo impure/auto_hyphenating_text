@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  hyphenator:
+    git:
+      url: https://github.com/impure/hyphenator.git
 
 dev_dependencies:
   flutter_test:
