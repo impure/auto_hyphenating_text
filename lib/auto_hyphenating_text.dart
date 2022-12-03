@@ -42,7 +42,7 @@ class AutoHyphenatingText extends StatefulWidget {
 		);
 	}
 
-	AutoHyphenatingText._({
+	const AutoHyphenatingText._({
 		required this.text,
 		required this.words,
 		this.style,
