@@ -92,12 +92,38 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 		return textPainter.size.width;
 	}
 
+	String mergeSyllablesFront(List<String> syllables, int indicesToMergeInclusive) {
+		 StringBuffer buffer = StringBuffer();
+
+		 for (int i = 0; i <= indicesToMergeInclusive; i++) {
+			 buffer.write(syllables[i]);
+		 }
+
+		 buffer.write("‐");
+		 return buffer.toString();
+	}
+
+	 String mergeSyllablesBack(List<String> syllables, int indicesToMergeInclusive) {
+		 StringBuffer buffer = StringBuffer();
+
+		 for (int i = indicesToMergeInclusive + 1; i < syllables.length; i++) {
+			 buffer.write(syllables[i]);
+		 }
+
+		 return buffer.toString();
+	 }
+
 	@override
 	Widget build(BuildContext context) {
 		return LayoutBuilder(
 				builder: (BuildContext context, BoxConstraints constraints) {
 
 			List<InlineSpan> texts = <InlineSpan>[];
+
+			final Hyphenator hyphenator = Hyphenator(
+				resource: loader!,
+				hyphenateSymbol: '_',
+			);
 
 			double singleSpaceWidth = getTextWidth(" ", widget.style, widget.textDirection, widget.textScaleFactor);
 			double currentLineSpaceUsed = 0;
@@ -107,21 +133,36 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				double textWidth = getTextWidth(widget.words[i], widget.style, widget.textDirection, widget.textScaleFactor);
 
 				if (currentLineSpaceUsed + textWidth < constraints.maxWidth) {
-					//texts.add(TextSpan(text: widget.words[i]));
-					texts.add(WidgetSpan(child: ColoredBox(color: Colors.red.withOpacity(0.5), child: Text(widget.words[i], style: widget.style, textScaleFactor: widget.textScaleFactor))));
+					texts.add(TextSpan(text: widget.words[i]));
 					currentLineSpaceUsed += textWidth;
 				} else {
-					texts.add(TextSpan(text: widget.words[i]));
-					//texts.add(TextSpan(text: "\n"));
-					//texts.add(WidgetSpan(child: SizedBox(width: constraints.maxWidth - currentLineSpaceUsed)));
-					currentLineSpaceUsed = textWidth;
+					List<String> syllables = hyphenator.hyphenateWordToList(widget.words[i]);
+					int? syllableToUse;
+
+					for (int i = 0; i < syllables.length; i++) {
+						if (currentLineSpaceUsed + getTextWidth(mergeSyllablesFront(syllables, i), widget.style, widget.textDirection, widget.textScaleFactor) < constraints.maxWidth) {
+							syllableToUse = i;
+						} else {
+							break;
+						}
+					}
+
+					if (syllableToUse == null) {
+						texts.add(TextSpan(text: widget.words[i]));
+						currentLineSpaceUsed = textWidth;
+					} else {
+						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse)));
+						texts.add(TextSpan(text: mergeSyllablesBack(syllables, syllableToUse)));
+						currentLineSpaceUsed = getTextWidth(mergeSyllablesBack(syllables, syllableToUse), widget.style, widget.textDirection, widget.textScaleFactor);
+					}
 				}
 
 				if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
-					texts.add(TextSpan(text: " "));
+					texts.add(const TextSpan(text: " "));
 					currentLineSpaceUsed += singleSpaceWidth;
 				} else {
 					//texts.add(TextSpan(text: "\n"));
+					texts.add(const TextSpan(text: " "));
 					//texts.add(WidgetSpan(child: SizedBox(width: constraints.maxWidth - currentLineSpaceUsed)));
 					currentLineSpaceUsed = 0;
 				}
