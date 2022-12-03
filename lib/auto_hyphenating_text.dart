@@ -154,7 +154,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse)));
 						widget.words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
-						// TODO: zero out remaining space
+						texts.add(const TextSpan(text: "\n"));
 					}
 				}
 
@@ -162,7 +162,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 					texts.add(const TextSpan(text: " "));
 					currentLineSpaceUsed += singleSpaceWidth;
 				} else {
-					// TODO: zero out remaining space
+					texts.add(const TextSpan(text: "\n"));
 					currentLineSpaceUsed = 0;
 				}
 			}
