@@ -16,7 +16,7 @@ class AutoHyphenatingText extends StatefulWidget {
 		StrutStyle? strutStyle,
 		TextDirection? textDirection,
 		Locale? locale,
-		bool? softwrap,
+		bool? softWrap,
 		TextOverflow? overflow,
 		double? textScaleFactor,
 		int? maxLines,
@@ -34,7 +34,7 @@ class AutoHyphenatingText extends StatefulWidget {
 			textDirection: textDirection,
 			overflow: overflow,
 			locale: locale,
-			softwrap: softwrap,
+			softWrap: softWrap,
 			textScaleFactor: textScaleFactor,
 			maxLines: maxLines,
 			semanticsLabel: semanticsLabel,
@@ -52,7 +52,7 @@ class AutoHyphenatingText extends StatefulWidget {
 		this.textAlign,
 		this.textDirection,
 		this.locale,
-		this.softwrap,
+		this.softWrap,
 		this.overflow,
 		this.textScaleFactor,
 		this.maxLines,
@@ -69,7 +69,7 @@ class AutoHyphenatingText extends StatefulWidget {
 	final StrutStyle? strutStyle;
 	final TextDirection? textDirection;
 	final Locale? locale;
-	final bool? softwrap;
+	final bool? softWrap;
 	final TextOverflow? overflow;
 	final double? textScaleFactor;
 	final int? maxLines;
@@ -180,7 +180,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				textDirection: widget.textDirection,
 				strutStyle: widget.strutStyle,
 				locale: widget.locale,
-				softWrap: widget.softwrap ?? true,
+				softWrap: widget.softWrap ?? true,
 				overflow: widget.overflow ?? TextOverflow.clip,
 				textScaleFactor: widget.textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
 				textWidthBasis: widget.textWidthBasis ?? TextWidthBasis.parent,
