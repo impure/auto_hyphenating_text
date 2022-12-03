@@ -11,6 +11,7 @@ Future<void> initHyphenation([DefaultResourceLoaderLanguage language = DefaultRe
 class AutoHyphenatingText extends StatefulWidget {
 	factory AutoHyphenatingText(
 		String text, {
+		ResourceLoader? loader,
 		TextStyle? style,
 		TextAlign? textAlign,
 		StrutStyle? strutStyle,
@@ -28,6 +29,7 @@ class AutoHyphenatingText extends StatefulWidget {
 		return AutoHyphenatingText._(
 			text: text,
 			words: text.split(" "),
+			loader: loader,
 			style: style,
 			strutStyle: strutStyle,
 			textAlign: textAlign,
@@ -47,6 +49,7 @@ class AutoHyphenatingText extends StatefulWidget {
 	const AutoHyphenatingText._({
 		required this.text,
 		required this.words,
+		this.loader,
 		this.style,
 		this.strutStyle,
 		this.textAlign,
@@ -63,6 +66,7 @@ class AutoHyphenatingText extends StatefulWidget {
 	});
 
 	final String text;
+	final ResourceLoader? loader;
 	final List<String> words;
 	final TextStyle? style;
 	final TextAlign? textAlign;
@@ -122,7 +126,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 			List<InlineSpan> texts = <InlineSpan>[];
 
 			final Hyphenator hyphenator = Hyphenator(
-				resource: loader!,
+				resource: widget.loader ?? loader!,
 				hyphenateSymbol: '_',
 			);
 
