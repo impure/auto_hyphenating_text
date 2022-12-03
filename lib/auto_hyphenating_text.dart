@@ -1,4 +1,12 @@
-import 'package:flutter/widgets.dart';
+
+import 'package:flutter/material.dart';
+import 'package:hyphenator/hyphenator.dart';
+
+ResourceLoader? loader;
+
+Future<void> initHyphenation() async {
+	loader = await DefaultResourceLoader.load(DefaultResourceLoaderLanguage.enUs);
+}
 
 class AutoHyphenatingText extends StatefulWidget {
 	factory AutoHyphenatingText(
@@ -89,56 +97,6 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 		return LayoutBuilder(
 				builder: (BuildContext context, BoxConstraints constraints) {
 
-					/*
-			double? bestDeviation;
-			double? bestWidth;
-			int? numLines;
-
-			for (double currentWidth = constraints.maxWidth;
-					currentWidth > 0;
-					currentWidth--) {
-				final List<double> widths = <double>[0];
-
-				for (int dataIndex = 0; dataIndex < textData.length; dataIndex++) {
-					if (widths.last != 0 &&
-							widths.last + textData[dataIndex].width > currentWidth) {
-						// This fixes an issue when a line has a single space character and nothing else (due to an overflow)
-						if (dataIndex != 0 &&
-								textData[dataIndex - 1].isSpace &&
-								widths.last == textData[dataIndex - 1].width) {
-							widths.removeLast();
-							texts.removeAt(dataIndex - 1);
-							textData.removeAt(dataIndex - 1);
-							dataIndex--;
-						}
-
-						widths.add(0);
-					}
-					widths.last += textData[dataIndex].width;
-
-					// Penalty for making the line overflow (extra blank line)
-					if (widths.last > currentWidth) {
-						widths.add(0);
-						widths.add(0);
-					}
-				}
-
-				// Only consider lines with the highest possible number of lines
-				if (numLines == null) {
-					numLines = widths.length;
-				} else if (numLines < widths.length) {
-					break;
-				}
-
-				final double currentStandardDeviation = getStandardDeviation(widths);
-				//print(currentStandardDeviation);
-				if (bestDeviation == null || currentStandardDeviation < bestDeviation) {
-					bestDeviation = currentStandardDeviation;
-					bestWidth = currentWidth;
-				}
-			}
-			 */
-
 			List<InlineSpan> texts = <InlineSpan>[];
 
 			double singleSpaceWidth = getTextWidth(" ", widget.style, widget.textDirection, widget.textScaleFactor);
@@ -149,13 +107,14 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				double textWidth = getTextWidth(widget.words[i], widget.style, widget.textDirection, widget.textScaleFactor);
 
 				if (currentLineSpaceUsed + textWidth < constraints.maxWidth) {
-					texts.add(TextSpan(text: widget.words[i]));
+					//texts.add(TextSpan(text: widget.words[i]));
+					texts.add(WidgetSpan(child: ColoredBox(color: Colors.red.withOpacity(0.5), child: Text(widget.words[i], style: widget.style, textScaleFactor: widget.textScaleFactor))));
 					currentLineSpaceUsed += textWidth;
 				} else {
 					texts.add(TextSpan(text: widget.words[i]));
 					//texts.add(TextSpan(text: "\n"));
 					//texts.add(WidgetSpan(child: SizedBox(width: constraints.maxWidth - currentLineSpaceUsed)));
-					currentLineSpaceUsed = 0;
+					currentLineSpaceUsed = textWidth;
 				}
 
 				if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
@@ -163,7 +122,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 					currentLineSpaceUsed += singleSpaceWidth;
 				} else {
 					//texts.add(TextSpan(text: "\n"));
-					texts.add(WidgetSpan(child: SizedBox(width: constraints.maxWidth - currentLineSpaceUsed)));
+					//texts.add(WidgetSpan(child: SizedBox(width: constraints.maxWidth - currentLineSpaceUsed)));
 					currentLineSpaceUsed = 0;
 				}
 			}
