@@ -4,8 +4,8 @@ import 'package:hyphenator/hyphenator.dart';
 
 ResourceLoader? loader;
 
-Future<void> initHyphenation() async {
-	loader = await DefaultResourceLoader.load(DefaultResourceLoaderLanguage.enUs);
+Future<void> initHyphenation([DefaultResourceLoaderLanguage language = DefaultResourceLoaderLanguage.enUs]) async {
+	loader = await DefaultResourceLoader.load(language);
 }
 
 class AutoHyphenatingText extends StatefulWidget {
