@@ -15,8 +15,8 @@ class AutoHyphenatingText extends StatefulWidget {
 		TextAlign? textAlign,
 		StrutStyle? strutStyle,
 		TextDirection? textDirection,
-		//final Locale? locale;
-		//final bool? softWrap;
+		Locale? locale,
+		bool? softwrap,
 		TextOverflow? overflow,
 		double? textScaleFactor,
 		int? maxLines,
@@ -33,6 +33,8 @@ class AutoHyphenatingText extends StatefulWidget {
 			textAlign: textAlign,
 			textDirection: textDirection,
 			overflow: overflow,
+			locale: locale,
+			softwrap: softwrap,
 			textScaleFactor: textScaleFactor,
 			maxLines: maxLines,
 			semanticsLabel: semanticsLabel,
@@ -49,8 +51,8 @@ class AutoHyphenatingText extends StatefulWidget {
 		this.strutStyle,
 		this.textAlign,
 		this.textDirection,
-		//this.locale,
-		//this.softWrap,
+		this.locale,
+		this.softwrap,
 		this.overflow,
 		this.textScaleFactor,
 		this.maxLines,
@@ -66,9 +68,8 @@ class AutoHyphenatingText extends StatefulWidget {
 	final TextAlign? textAlign;
 	final StrutStyle? strutStyle;
 	final TextDirection? textDirection;
-
-	//final Locale? locale;
-	//final bool? softWrap;
+	final Locale? locale;
+	final bool? softwrap;
 	final TextOverflow? overflow;
 	final double? textScaleFactor;
 	final int? maxLines;
@@ -127,6 +128,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 
 			double singleSpaceWidth = getTextWidth(" ", widget.style, widget.textDirection, widget.textScaleFactor);
 			double currentLineSpaceUsed = 0;
+			int lines = 0;
 
 			for (int i = 0; i < widget.words.length; i++) {
 
@@ -155,6 +157,9 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 						widget.words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
 						texts.add(const TextSpan(text: "\n"));
+						if (widget.maxLines != null && lines >= widget.maxLines!) {
+							break;
+						}
 					}
 				}
 
@@ -164,10 +169,22 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				} else {
 					texts.add(const TextSpan(text: "\n"));
 					currentLineSpaceUsed = 0;
+					lines++;
+					if (widget.maxLines != null && lines >= widget.maxLines!) {
+						break;
+					}
 				}
 			}
 
 			return RichText(
+				textDirection: widget.textDirection,
+				strutStyle: widget.strutStyle,
+				locale: widget.locale,
+				softWrap: widget.softwrap ?? true,
+				overflow: widget.overflow ?? TextOverflow.clip,
+				textScaleFactor: widget.textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+				textWidthBasis: widget.textWidthBasis ?? TextWidthBasis.parent,
+				selectionColor: widget.selectionColor,
 				textAlign: widget.textAlign ?? TextAlign.start,
 				text: TextSpan(
 					style: widget.style,
@@ -175,17 +192,5 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				),
 			);
 		});
-		return Text(
-			widget.text,
-			style: widget.style,
-			textAlign: widget.textAlign,
-			strutStyle: widget.strutStyle,
-			textDirection: widget.textDirection,
-			overflow: widget.overflow,
-			textScaleFactor: widget.textScaleFactor,
-			maxLines: widget.maxLines,
-			semanticsLabel: widget.semanticsLabel,
-			selectionColor: widget.selectionColor,
-		);
 	}
 }
