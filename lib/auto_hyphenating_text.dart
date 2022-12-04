@@ -193,7 +193,6 @@ class AutoHyphenatingText extends StatelessWidget {
 						}
 					}
 				}
-
 			}
 
 			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
