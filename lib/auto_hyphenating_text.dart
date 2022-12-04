@@ -121,6 +121,16 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 
 	@override
 	Widget build(BuildContext context) {
+
+		final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
+		TextStyle? effectiveTextStyle = widget.style;
+		if (widget.style == null || widget.style!.inherit) {
+			effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
+		}
+		if (MediaQuery.boldTextOverride(context)) {
+			effectiveTextStyle = effectiveTextStyle!.merge(const TextStyle(fontWeight: FontWeight.bold));
+		}
+
 		return LayoutBuilder(
 				builder: (BuildContext context, BoxConstraints constraints) {
 
@@ -131,13 +141,13 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				hyphenateSymbol: '_',
 			);
 
-			double singleSpaceWidth = getTextWidth(" ", widget.style, widget.textDirection, widget.textScaleFactor);
+			double singleSpaceWidth = getTextWidth(" ", effectiveTextStyle, widget.textDirection, widget.textScaleFactor);
 			double currentLineSpaceUsed = 0;
 			int lines = 0;
 
 			for (int i = 0; i < widget.words.length; i++) {
 
-				double textWidth = getTextWidth(widget.words[i], widget.style, widget.textDirection, widget.textScaleFactor);
+				double textWidth = getTextWidth(widget.words[i], effectiveTextStyle, widget.textDirection, widget.textScaleFactor);
 
 				if (currentLineSpaceUsed + textWidth < constraints.maxWidth) {
 					texts.add(TextSpan(text: widget.words[i]));
@@ -147,7 +157,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 					int? syllableToUse;
 
 					for (int i = 0; i < syllables.length; i++) {
-						if (currentLineSpaceUsed + getTextWidth(mergeSyllablesFront(syllables, i), widget.style, widget.textDirection, widget.textScaleFactor) < constraints.maxWidth) {
+						if (currentLineSpaceUsed + getTextWidth(mergeSyllablesFront(syllables, i), effectiveTextStyle, widget.textDirection, widget.textScaleFactor) < constraints.maxWidth) {
 							syllableToUse = i;
 						} else {
 							break;
@@ -194,7 +204,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				textAlign: widget.textAlign ?? TextAlign.start,
 				selectionRegistrar: registrar,
 				text: TextSpan(
-					style: widget.style,
+					style: effectiveTextStyle,
 					children: texts,
 				),
 			);
