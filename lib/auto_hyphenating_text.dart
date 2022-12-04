@@ -160,8 +160,8 @@ class AutoHyphenatingText extends StatelessWidget {
 
 					if (syllableToUse == null) {
 						if (currentLineSpaceUsed == 0) {
-							texts.add(const TextSpan(text: " "));
-							currentLineSpaceUsed += singleSpaceWidth;
+							texts.add(TextSpan(text: words[i]));
+							currentLineSpaceUsed += wordWidth;
 						} else {
 							i--;
 							texts.add(const TextSpan(text: "\n"));
