@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hyphenator/hyphenator.dart';
 
 ResourceLoader? loader;
@@ -180,7 +181,8 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				}
 			}
 
-			return RichText(
+			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
+			Widget text = RichText(
 				textDirection: widget.textDirection,
 				strutStyle: widget.strutStyle,
 				locale: widget.locale,
@@ -190,11 +192,29 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 				textWidthBasis: widget.textWidthBasis ?? TextWidthBasis.parent,
 				selectionColor: widget.selectionColor,
 				textAlign: widget.textAlign ?? TextAlign.start,
+				selectionRegistrar: registrar,
 				text: TextSpan(
 					style: widget.style,
 					children: texts,
 				),
 			);
+
+			if (registrar != null) {
+				text = MouseRegion(
+					cursor: SystemMouseCursors.text,
+					child: text,
+				);
+			}
+			if (widget.semanticsLabel != null) {
+				text = Semantics(
+					textDirection: widget.textDirection,
+					label: widget.semanticsLabel,
+					child: ExcludeSemantics(
+						child: text,
+					),
+				);
+			}
+			return text;
 		});
 	}
 }
