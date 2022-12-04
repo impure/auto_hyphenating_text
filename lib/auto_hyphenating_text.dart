@@ -116,6 +116,37 @@ class AutoHyphenatingText extends StatelessWidget {
 			return textPainter.size.width;
 		}
 
+		int? numSyllablesCanFit(List<String> syllables, double availableSpace, TextStyle? effectiveTextStyle) {
+
+			int lowerBound = 0;
+			int upperBound = syllables.length;
+			int counter = 0;
+
+			while (lowerBound != upperBound - 1) {
+				int testIndex = ((lowerBound + upperBound) * 0.5).floor();
+				counter++;
+				if (counter > 100) {
+					break;
+				}
+
+				if (getTextWidth(mergeSyllablesFront(syllables, testIndex), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+					upperBound = testIndex;
+				} else {
+					lowerBound = testIndex;
+				}
+			}
+
+			if (getTextWidth(mergeSyllablesFront(syllables, lowerBound), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+				if (lowerBound == 0) {
+					return null;
+				} else {
+					return lowerBound - 1;
+				}
+			}
+
+			return lowerBound;
+		}
+
 		final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
 		TextStyle? effectiveTextStyle = style;
 		if (style == null || style!.inherit) {
@@ -148,15 +179,8 @@ class AutoHyphenatingText extends StatelessWidget {
 					currentLineSpaceUsed += wordWidth;
 				} else {
 					List<String> syllables = hyphenator.hyphenateWordToList(words[i]);
-					int? syllableToUse;
 
-					for (int i = 0; i < syllables.length; i++) {
-						if (currentLineSpaceUsed + getTextWidth(mergeSyllablesFront(syllables, i), effectiveTextStyle, textDirection, textScaleFactor) < constraints.maxWidth) {
-							syllableToUse = i;
-						} else {
-							break;
-						}
-					}
+					int? syllableToUse = numSyllablesCanFit(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
 
 					if (syllableToUse == null) {
 						if (currentLineSpaceUsed == 0) {
