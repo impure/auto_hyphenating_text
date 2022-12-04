@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hyphenator/hyphenator.dart';
 
-ResourceLoader? loader;
+ResourceLoader? globalLoader;
 
 Future<void> initHyphenation([DefaultResourceLoaderLanguage language = DefaultResourceLoaderLanguage.enUs]) async {
-	loader = await DefaultResourceLoader.load(language);
+	globalLoader = await DefaultResourceLoader.load(language);
 }
 
-class AutoHyphenatingText extends StatefulWidget {
+class AutoHyphenatingText extends StatelessWidget {
 	factory AutoHyphenatingText(
 		String text, {
 		ResourceLoader? loader,
@@ -82,22 +82,6 @@ class AutoHyphenatingText extends StatefulWidget {
 	final TextWidthBasis? textWidthBasis;
 	final Color? selectionColor;
 
-	@override
-	State<AutoHyphenatingText> createState() => _AutoHyphenatingTextState();
-}
-
-class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
-
-	 double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
-		final TextPainter textPainter = TextPainter(
-			 text: TextSpan(text: text, style: style),
-			 textScaleFactor: scaleFactor ?? MediaQuery.of(context).textScaleFactor,
-			 maxLines: 1,
-			 textDirection: direction ?? Directionality.of(context),
-		)..layout();
-		return textPainter.size.width;
-	}
-
 	String mergeSyllablesFront(List<String> syllables, int indicesToMergeInclusive) {
 		 StringBuffer buffer = StringBuffer();
 
@@ -122,10 +106,20 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 	@override
 	Widget build(BuildContext context) {
 
+		double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
+			final TextPainter textPainter = TextPainter(
+				text: TextSpan(text: text, style: style),
+				textScaleFactor: scaleFactor ?? MediaQuery.of(context).textScaleFactor,
+				maxLines: 1,
+				textDirection: direction ?? Directionality.of(context),
+			)..layout();
+			return textPainter.size.width;
+		}
+
 		final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-		TextStyle? effectiveTextStyle = widget.style;
-		if (widget.style == null || widget.style!.inherit) {
-			effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
+		TextStyle? effectiveTextStyle = style;
+		if (style == null || style!.inherit) {
+			effectiveTextStyle = defaultTextStyle.style.merge(style);
 		}
 		if (MediaQuery.boldTextOverride(context)) {
 			effectiveTextStyle = effectiveTextStyle!.merge(const TextStyle(fontWeight: FontWeight.bold));
@@ -137,27 +131,27 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 			List<InlineSpan> texts = <InlineSpan>[];
 
 			final Hyphenator hyphenator = Hyphenator(
-				resource: widget.loader ?? loader!,
+				resource: loader ?? globalLoader!,
 				hyphenateSymbol: '_',
 			);
 
-			double singleSpaceWidth = getTextWidth(" ", effectiveTextStyle, widget.textDirection, widget.textScaleFactor);
+			double singleSpaceWidth = getTextWidth(" ", effectiveTextStyle, textDirection, textScaleFactor);
 			double currentLineSpaceUsed = 0;
 			int lines = 0;
 
-			for (int i = 0; i < widget.words.length; i++) {
+			for (int i = 0; i < words.length; i++) {
 
-				double textWidth = getTextWidth(widget.words[i], effectiveTextStyle, widget.textDirection, widget.textScaleFactor);
+				double textWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, textScaleFactor);
 
 				if (currentLineSpaceUsed + textWidth < constraints.maxWidth) {
-					texts.add(TextSpan(text: widget.words[i]));
+					texts.add(TextSpan(text: words[i]));
 					currentLineSpaceUsed += textWidth;
 				} else {
-					List<String> syllables = hyphenator.hyphenateWordToList(widget.words[i]);
+					List<String> syllables = hyphenator.hyphenateWordToList(words[i]);
 					int? syllableToUse;
 
 					for (int i = 0; i < syllables.length; i++) {
-						if (currentLineSpaceUsed + getTextWidth(mergeSyllablesFront(syllables, i), effectiveTextStyle, widget.textDirection, widget.textScaleFactor) < constraints.maxWidth) {
+						if (currentLineSpaceUsed + getTextWidth(mergeSyllablesFront(syllables, i), effectiveTextStyle, textDirection, textScaleFactor) < constraints.maxWidth) {
 							syllableToUse = i;
 						} else {
 							break;
@@ -165,14 +159,14 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 					}
 
 					if (syllableToUse == null) {
-						texts.add(TextSpan(text: widget.words[i]));
+						texts.add(TextSpan(text: words[i]));
 						currentLineSpaceUsed = textWidth;
 					} else {
 						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse)));
-						widget.words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
+						words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
 						texts.add(const TextSpan(text: "\n"));
-						if (widget.maxLines != null && lines >= widget.maxLines!) {
+						if (maxLines != null && lines >= maxLines!) {
 							break;
 						}
 					}
@@ -185,7 +179,7 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 					texts.add(const TextSpan(text: "\n"));
 					currentLineSpaceUsed = 0;
 					lines++;
-					if (widget.maxLines != null && lines >= widget.maxLines!) {
+					if (maxLines != null && lines >= maxLines!) {
 						break;
 					}
 				}
@@ -193,15 +187,15 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 
 			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
 			Widget text = RichText(
-				textDirection: widget.textDirection,
-				strutStyle: widget.strutStyle,
-				locale: widget.locale,
-				softWrap: widget.softWrap ?? true,
-				overflow: widget.overflow ?? TextOverflow.clip,
-				textScaleFactor: widget.textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
-				textWidthBasis: widget.textWidthBasis ?? TextWidthBasis.parent,
-				selectionColor: widget.selectionColor,
-				textAlign: widget.textAlign ?? TextAlign.start,
+				textDirection: textDirection,
+				strutStyle: strutStyle,
+				locale: locale,
+				softWrap: softWrap ?? true,
+				overflow: overflow ?? TextOverflow.clip,
+				textScaleFactor: textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+				textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
+				selectionColor: selectionColor,
+				textAlign: textAlign ?? TextAlign.start,
 				selectionRegistrar: registrar,
 				text: TextSpan(
 					style: effectiveTextStyle,
@@ -215,10 +209,10 @@ class _AutoHyphenatingTextState extends State<AutoHyphenatingText> {
 					child: text,
 				);
 			}
-			if (widget.semanticsLabel != null) {
+			if (semanticsLabel != null) {
 				text = Semantics(
-					textDirection: widget.textDirection,
-					label: widget.semanticsLabel,
+					textDirection: textDirection,
+					label: semanticsLabel,
 					child: ExcludeSemantics(
 						child: text,
 					),
