@@ -21,4 +21,17 @@ void main() async {
 		);
 		expect(find.byType(RichText).toString().contains("Hello"), true);
 	});
+
+	testWidgets("Small Lines, Should Not Cause An Infinite Loop", (WidgetTester tester) async {
+		await tester.pumpWidget(
+			MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 100,
+						child: AutoHyphenatingText("How much wood could a woodchuck chuck if a woodchuck could chuck wood?"),
+					),
+				),
+			),
+		);
+	});
 }

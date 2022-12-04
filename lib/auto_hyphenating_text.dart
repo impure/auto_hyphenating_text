@@ -179,20 +179,21 @@ class AutoHyphenatingText extends StatelessWidget {
 						if (maxLines != null && lines >= maxLines!) {
 							break;
 						}
+
+						if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
+							texts.add(const TextSpan(text: " "));
+							currentLineSpaceUsed += singleSpaceWidth;
+						} else {
+							texts.add(const TextSpan(text: "\n"));
+							currentLineSpaceUsed = 0;
+							lines++;
+							if (maxLines != null && lines >= maxLines!) {
+								break;
+							}
+						}
 					}
 				}
 
-				if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
-					texts.add(const TextSpan(text: " "));
-					currentLineSpaceUsed += singleSpaceWidth;
-				} else {
-					texts.add(const TextSpan(text: "\n"));
-					currentLineSpaceUsed = 0;
-					lines++;
-					if (maxLines != null && lines >= maxLines!) {
-						break;
-					}
-				}
 			}
 
 			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
