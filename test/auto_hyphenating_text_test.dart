@@ -48,7 +48,7 @@ void main() async {
 			),
 		);
 		expect(find.byType(RichText).toString().contains("wood‐"), true);
-		expect(find.byType(RichText).toString().contains("How much\\nwood \\ncould a \\nwood‐\\n chuck"), true);
+		expect(find.byType(RichText).toString().contains("How much\\nwood \\ncould a \\nwood‐\\nchuck"), true);
 	});
 
 	testWidgets("Should Not Generate Extra Newlines", (WidgetTester tester) async {
