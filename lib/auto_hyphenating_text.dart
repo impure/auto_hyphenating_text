@@ -118,20 +118,15 @@ class AutoHyphenatingText extends StatelessWidget {
 
 		int? numSyllablesCanFit(List<String> syllables, double availableSpace, TextStyle? effectiveTextStyle) {
 
-			int lowerBound = 0;
-			int upperBound = syllables.length;
-			int counter = 0;
-
 			if (getTextWidth(mergeSyllablesFront(syllables, 0), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
 				return null;
 			}
 
+			int lowerBound = 0;
+			int upperBound = syllables.length;
+
 			while (lowerBound != upperBound - 1) {
 				int testIndex = ((lowerBound + upperBound) * 0.5).floor();
-				counter++;
-				if (counter > 100) {
-					break;
-				}
 
 				if (getTextWidth(mergeSyllablesFront(syllables, testIndex), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
 					upperBound = testIndex;
