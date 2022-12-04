@@ -188,6 +188,9 @@ class AutoHyphenatingText extends StatelessWidget {
 							currentLineSpaceUsed += wordWidth;
 						} else {
 							i--;
+							if (texts.last == const TextSpan(text: " ")) {
+								texts.removeLast();
+							}
 							texts.add(const TextSpan(text: "\n"));
 							currentLineSpaceUsed = 0;
 							lines++;
@@ -213,6 +216,9 @@ class AutoHyphenatingText extends StatelessWidget {
 						texts.add(const TextSpan(text: " "));
 						currentLineSpaceUsed += singleSpaceWidth;
 					} else {
+						if (texts.last == const TextSpan(text: " ")) {
+							texts.removeLast();
+						}
 						texts.add(const TextSpan(text: "\n"));
 						currentLineSpaceUsed = 0;
 						lines++;
