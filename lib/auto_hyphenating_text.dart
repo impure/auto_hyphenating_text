@@ -180,6 +180,7 @@ class AutoHyphenatingText extends StatelessWidget {
 						if (maxLines != null && lines >= maxLines!) {
 							break;
 						}
+						continue;
 					}
 				}
 

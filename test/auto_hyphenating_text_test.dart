@@ -50,4 +50,18 @@ void main() async {
 		expect(find.byType(RichText).toString().contains("wood‐"), true);
 		expect(find.byType(RichText).toString().contains("How much\\nwood \\ncould a \\nwood‐\\n chuck"), true);
 	});
+
+	testWidgets("Should Not Generate Extra Newlines", (WidgetTester tester) async {
+		await tester.pumpWidget(
+			MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 300,
+						child: AutoHyphenatingText("pneumonoultramicroscopicvolcanoiosis"),
+					),
+				),
+			),
+		);
+		expect(find.byType(RichText).toString().replaceAll(" ", "").contains("\\n\\n"), false);
+	});
 }
