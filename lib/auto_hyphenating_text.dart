@@ -141,11 +141,11 @@ class AutoHyphenatingText extends StatelessWidget {
 
 			for (int i = 0; i < words.length; i++) {
 
-				double textWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, textScaleFactor);
+				double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, textScaleFactor);
 
-				if (currentLineSpaceUsed + textWidth < constraints.maxWidth) {
+				if (currentLineSpaceUsed + wordWidth < constraints.maxWidth) {
 					texts.add(TextSpan(text: words[i]));
-					currentLineSpaceUsed += textWidth;
+					currentLineSpaceUsed += wordWidth;
 				} else {
 					List<String> syllables = hyphenator.hyphenateWordToList(words[i]);
 					int? syllableToUse;
