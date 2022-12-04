@@ -52,7 +52,7 @@ void main() async {
 		text = text.substring(text.indexOf("\"", text.indexOf("RichText") + "RichText".length + 1) + 1);
 		text = text.substring(0, text.indexOf("\""));
 		expect(text.contains("wood‐"), true);
-		expect(text, "How much\\nwood \\ncould a \\nwood‐\\nchuck \\nchuck if\\na wood‐\\nchuck \\ncould \\nchuck \\nwood? ");
+		expect(text, "How much\\nwood \\ncould a \\nwood‐\\nchuck \\nchuck if\\na wood‐\\nchuck \\ncould \\nchuck \\nwood?");
 	});
 
 	testWidgets("No Extra Space At The End", (WidgetTester tester) async {
