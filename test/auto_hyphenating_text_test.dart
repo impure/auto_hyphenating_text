@@ -34,4 +34,19 @@ void main() async {
 			),
 		);
 	});
+
+	// Checks 274869ad6f4323e12005301c6b4916f5f0233ba2
+	testWidgets("Small Lines, Should Hyphenate 'Woodchuck'", (WidgetTester tester) async {
+		await tester.pumpWidget(
+			MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 400,
+						child: AutoHyphenatingText("How much wood could a woodchuck chuck if a woodchuck could chuck wood?"),
+					),
+				),
+			),
+		);
+		expect(find.byType(RichText).toString().contains("wood‐"), true);
+	});
 }
