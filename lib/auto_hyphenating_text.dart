@@ -122,6 +122,10 @@ class AutoHyphenatingText extends StatelessWidget {
 			int upperBound = syllables.length;
 			int counter = 0;
 
+			if (getTextWidth(mergeSyllablesFront(syllables, 0), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+				return null;
+			}
+
 			while (lowerBound != upperBound - 1) {
 				int testIndex = ((lowerBound + upperBound) * 0.5).floor();
 				counter++;
@@ -133,14 +137,6 @@ class AutoHyphenatingText extends StatelessWidget {
 					upperBound = testIndex;
 				} else {
 					lowerBound = testIndex;
-				}
-			}
-
-			if (getTextWidth(mergeSyllablesFront(syllables, lowerBound), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
-				if (lowerBound == 0) {
-					return null;
-				} else {
-					return lowerBound - 1;
 				}
 			}
 
