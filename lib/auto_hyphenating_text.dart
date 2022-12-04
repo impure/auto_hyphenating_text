@@ -208,15 +208,17 @@ class AutoHyphenatingText extends StatelessWidget {
 					}
 				}
 
-				if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
-					texts.add(const TextSpan(text: " "));
-					currentLineSpaceUsed += singleSpaceWidth;
-				} else {
-					texts.add(const TextSpan(text: "\n"));
-					currentLineSpaceUsed = 0;
-					lines++;
-					if (maxLines != null && lines >= maxLines!) {
-						break;
+				if (i != words.length - 1) {
+					if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
+						texts.add(const TextSpan(text: " "));
+						currentLineSpaceUsed += singleSpaceWidth;
+					} else {
+						texts.add(const TextSpan(text: "\n"));
+						currentLineSpaceUsed = 0;
+						lines++;
+						if (maxLines != null && lines >= maxLines!) {
+							break;
+						}
 					}
 				}
 			}
