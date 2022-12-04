@@ -116,7 +116,7 @@ class AutoHyphenatingText extends StatelessWidget {
 			return textPainter.size.width;
 		}
 
-		int? numSyllablesCanFit(List<String> syllables, double availableSpace, TextStyle? effectiveTextStyle) {
+		int? getLastSyllableIndex(List<String> syllables, double availableSpace, TextStyle? effectiveTextStyle) {
 
 			if (getTextWidth(mergeSyllablesFront(syllables, 0), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
 				return null;
@@ -171,7 +171,7 @@ class AutoHyphenatingText extends StatelessWidget {
 				} else {
 					List<String> syllables = hyphenator.hyphenateWordToList(words[i]);
 
-					int? syllableToUse = numSyllablesCanFit(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
+					int? syllableToUse = getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
 
 					if (syllableToUse == null) {
 						if (currentLineSpaceUsed == 0) {
