@@ -169,9 +169,9 @@ class AutoHyphenatingText extends StatelessWidget {
 					texts.add(TextSpan(text: words[i]));
 					currentLineSpaceUsed += wordWidth;
 				} else {
-					List<String> syllables = hyphenator.hyphenateWordToList(words[i]);
 
-					int? syllableToUse = getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
+					List<String> syllables = words[i].length == 1 ? <String>[words[i]] : hyphenator.hyphenateWordToList(words[i]);
+					int? syllableToUse = words[i].length == 1 ? null : getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
 
 					if (syllableToUse == null) {
 						if (currentLineSpaceUsed == 0) {
