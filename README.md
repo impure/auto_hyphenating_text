@@ -34,7 +34,7 @@ This package needs to be initialized using the following:
 await initHyphenation();
 ```
 
-This will load the hyphenation algorithm. Alternately you can not do this and specify the resource file manually every time you call `AutoHyphenatingText`.
+This will load the hyphenation algorithm. You can skip this step if you manually initialized the hyphenation algorithm yourself.
 
 Then it can be used as a drop in replacement for normal text. So
 

@@ -170,8 +170,8 @@ class AutoHyphenatingText extends StatelessWidget {
 					currentLineSpaceUsed += wordWidth;
 				} else {
 
-					List<String> syllables = words[i].length == 1 ? <String>[words[i]] : hyphenator.hyphenateWordToList(words[i]);
-					int? syllableToUse = words[i].length == 1 ? null : getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
+					final List<String> syllables = words[i].length == 1 ? <String>[words[i]] : hyphenator.hyphenateWordToList(words[i]);
+					final int? syllableToUse = words[i].length == 1 ? null : getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
 
 					if (syllableToUse == null) {
 						if (currentLineSpaceUsed == 0) {
