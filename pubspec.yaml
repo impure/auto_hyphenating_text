@@ -1,7 +1,7 @@
 name: auto_hyphenating_text
 description: A text box that automatically adds hyphenation.
 version: 0.0.1
-homepage:
+homepage: https://github.com/impure/auto_hyphenating_text
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
