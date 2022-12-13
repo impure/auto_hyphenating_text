@@ -1,6 +1,6 @@
 name: auto_hyphenating_text
 description: A text box that automatically adds hyphenation.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/impure/auto_hyphenating_text
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hyphenator_impure: ^0.1.0
+  hyphenator_impure: ^0.1.1
 
 dev_dependencies:
   flutter_test:

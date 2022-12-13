@@ -152,6 +152,7 @@ class AutoHyphenatingText extends StatelessWidget {
 
 			List<InlineSpan> texts = <InlineSpan>[];
 
+			assert(globalLoader != null, "AutoHyphenatingText not initialized! Remember to call initHyphenation().");
 			final Hyphenator hyphenator = Hyphenator(
 				resource: loader ?? globalLoader!,
 				hyphenateSymbol: '_',
