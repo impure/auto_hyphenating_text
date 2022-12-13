@@ -22,6 +22,22 @@ void main() async {
 		expect(find.byType(RichText).toString().contains("Hello"), true);
 	});
 
+	testWidgets("Throws assertion error if not initialized", (WidgetTester tester) async {
+		globalLoader = null;
+		await tester.pumpWidget(
+			MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 0,
+						child: AutoHyphenatingText("Hello"),
+					),
+				),
+			),
+		);
+		expect(tester.takeException(), isAssertionError);
+		await initHyphenation();
+	});
+
 	testWidgets("Small Lines, Should Not Cause An Infinite Loop", (WidgetTester tester) async {
 		await tester.pumpWidget(
 			MaterialApp(
