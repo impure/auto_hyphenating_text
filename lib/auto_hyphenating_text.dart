@@ -13,6 +13,7 @@ class AutoHyphenatingText extends StatelessWidget {
 	factory AutoHyphenatingText(
 		String text, {
 		ResourceLoader? loader,
+		bool Function(double totalLineWidth, double lineWidthAlreadyUsed, double currentWordWidth)? shouldHyphenate,
 		TextStyle? style,
 		TextAlign? textAlign,
 		StrutStyle? strutStyle,
@@ -30,6 +31,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		return AutoHyphenatingText._(
 			text: text,
 			words: text.split(" "),
+			shouldHyphenate: shouldHyphenate,
 			loader: loader,
 			style: style,
 			strutStyle: strutStyle,
@@ -50,6 +52,7 @@ class AutoHyphenatingText extends StatelessWidget {
 	const AutoHyphenatingText._({
 		required this.text,
 		required this.words,
+		this.shouldHyphenate,
 		this.loader,
 		this.style,
 		this.strutStyle,
@@ -68,6 +71,7 @@ class AutoHyphenatingText extends StatelessWidget {
 
 	final String text;
 	final ResourceLoader? loader;
+	final bool Function(double totalLineWidth, double lineWidthAlreadyUsed, double currentWordWidth)? shouldHyphenate;
 	final List<String> words;
 	final TextStyle? style;
 	final TextAlign? textAlign;
@@ -174,7 +178,7 @@ class AutoHyphenatingText extends StatelessWidget {
 					final List<String> syllables = words[i].length == 1 ? <String>[words[i]] : hyphenator.hyphenateWordToList(words[i]);
 					final int? syllableToUse = words[i].length == 1 ? null : getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle);
 
-					if (syllableToUse == null) {
+					if (syllableToUse == null || (shouldHyphenate != null && !shouldHyphenate!(constraints.maxWidth, currentLineSpaceUsed, wordWidth))) {
 						if (currentLineSpaceUsed == 0) {
 							texts.add(TextSpan(text: words[i]));
 							currentLineSpaceUsed += wordWidth;

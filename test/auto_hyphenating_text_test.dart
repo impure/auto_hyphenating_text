@@ -31,6 +31,113 @@ void main() async {
 		expect(getText(), "Hello");
 	});
 
+	group("shouldHyphenate()", () {
+		testWidgets("No should hyphenate and always hyphenate should be the same", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 700,
+							child: AutoHyphenatingText("The CEO made some controversial statements yesterday."),
+						),
+					),
+				),
+			);
+			final String noHyphenationGiven = getText();
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 700,
+							child: AutoHyphenatingText(
+								"The CEO made some controversial statements yesterday.",
+								shouldHyphenate: (double totalWidth, __, ___) {
+									expect(totalWidth, 700);
+									return true;
+								},
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), noHyphenationGiven);
+			expect(getText(), "The CEO made\\nsome contro‐\\nversial state‐\\nments yester‐\\nday.");
+		});
+
+		testWidgets("Never hyphenate", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 700,
+							child: AutoHyphenatingText(
+								"The CEO made some controversial statements yesterday.",
+								shouldHyphenate: (double totalWidth, __, ___) {
+									expect(totalWidth, 700);
+									return false;
+								},
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), "The CEO made\\nsome\\ncontroversial\\nstatements\\nyesterday.");
+		});
+
+		testWidgets("Only hyphenate long words", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 500,
+							child: AutoHyphenatingText(
+								"The CEO made some controversial statements yesterday.",
+								shouldHyphenate: (double totalWidth, __, double wordWidth) {
+									expect(totalWidth, 500);
+									return wordWidth > 400;
+								},
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), "TThe CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
+		});
+
+		testWidgets("Only hyphenate words if not starting a line with them", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 300,
+							child: AutoHyphenatingText(
+								"A buffalo buffalo can buffalo buffalo buffalo",
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), "A buf‐\\nfalo\\nbuf‐\\nfalo\\ncan\\nbuf‐\\nfalo\\nbuf‐\\nfalo\\nbuf‐\\nfalo");
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 300,
+							child: AutoHyphenatingText(
+								"A buffalo buffalo can buffalo buffalo buffalo",
+								shouldHyphenate: (double totalWidth, double currentLineWidth, _) {
+									expect(totalWidth, 300);
+									return currentLineWidth != 0;
+								},
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), "A buf‐\\nfalo\\nbuffalo\\ncan\\nbuffalo\\nbuffalo\\nbuffalo");
+		});
+	});
+
 	testWidgets("Throws assertion error if not initialized", (WidgetTester tester) async {
 		globalLoader = null;
 		await tester.pumpWidget(
