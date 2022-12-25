@@ -2,10 +2,19 @@
 import 'package:auto_hyphenating_text/auto_hyphenating_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:state_groups/state_groups.dart';
 
 void main() async {
 	TestWidgetsFlutterBinding.ensureInitialized();
 	await initHyphenation();
+
+	String getText() {
+		String text = find.byType(RichText).toString();
+		text = text.substring(text.indexOf("RichText") + "RichText".length + 1);
+		text = text.substring(text.indexOf("\"", text.indexOf("RichText") + "RichText".length + 1) + 1);
+		text = text.substring(0, text.indexOf("\""));
+		return text;
+	}
 
 	// Checks 1e844e8cd0d9b2da0b4f3fc3ceee9df8a85d7f5a
 	testWidgets("Zero Width, Should Not Cause An Infinite Loop", (WidgetTester tester) async {
@@ -19,7 +28,7 @@ void main() async {
 				),
 			),
 		);
-		expect(find.byType(RichText).toString().contains("Hello"), true);
+		expect(getText(), "Hello");
 	});
 
 	testWidgets("Throws assertion error if not initialized", (WidgetTester tester) async {
@@ -63,12 +72,8 @@ void main() async {
 				),
 			),
 		);
-		String text = find.byType(RichText).toString();
-		text = text.substring(text.indexOf("RichText") + "RichText".length + 1);
-		text = text.substring(text.indexOf("\"", text.indexOf("RichText") + "RichText".length + 1) + 1);
-		text = text.substring(0, text.indexOf("\""));
-		expect(text.contains("wood‐"), true);
-		expect(text, "How much\\nwood\\ncould a\\nwood‐\\nchuck\\nchuck if\\na wood‐\\nchuck\\ncould\\nchuck\\nwood?");
+		expect(getText().contains("wood‐"), true);
+		expect(getText(), "How much\\nwood\\ncould a\\nwood‐\\nchuck\\nchuck if\\na wood‐\\nchuck\\ncould\\nchuck\\nwood?");
 	});
 
 	testWidgets("No Extra Space At The End", (WidgetTester tester) async {
@@ -82,11 +87,7 @@ void main() async {
 				),
 			),
 		);
-		String text = find.byType(RichText).toString();
-		text = text.substring(text.indexOf("RichText") + "RichText".length + 1);
-		text = text.substring(text.indexOf("\"", text.indexOf("RichText") + "RichText".length + 1) + 1);
-		text = text.substring(0, text.indexOf("\""));
-		expect(text, "");
+		expect(getText(), "");
 	});
 
 	testWidgets("Should Not Generate Extra Newlines", (WidgetTester tester) async {
@@ -100,6 +101,6 @@ void main() async {
 				),
 			),
 		);
-		expect(find.byType(RichText).toString().replaceAll(" ", "").contains("\\n\\n"), false);
+		expect(getText().replaceAll(" ", "").contains("\\n\\n"), false);
 	});
 }
