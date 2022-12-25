@@ -30,6 +30,35 @@ void main() async {
 		expect(getText(), "Hello");
 	});
 
+	testWidgets("Build should be non-mutating", (WidgetTester tester) async {
+		AutoHyphenatingText text = AutoHyphenatingText("The CEO made some controversial statements yesterday.");
+		await tester.pumpWidget(
+			MaterialApp(
+				home: Center(
+					child: SizedBox(
+						key: const Key("1"),
+						width: 700,
+						child: text,
+					),
+				),
+			),
+		);
+		String firstText = getText();
+		await tester.pumpWidget(
+			MaterialApp(
+				home: Center(
+					child: SizedBox(
+						key: const Key("2"),
+						width: 700,
+						child: text,
+					),
+				),
+			),
+		);
+		expect(firstText, getText());
+		expect(getText(), "The CEO made\\nsome contro‐\\nversial state‐\\nments yester‐\\nday.");
+	});
+
 	group("shouldHyphenate()", () {
 		testWidgets("No should hyphenate and always hyphenate should be the same", (WidgetTester tester) async {
 			await tester.pumpWidget(

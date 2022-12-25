@@ -10,48 +10,8 @@ Future<void> initHyphenation([DefaultResourceLoaderLanguage language = DefaultRe
 }
 
 class AutoHyphenatingText extends StatelessWidget {
-	factory AutoHyphenatingText(
-		String text, {
-		ResourceLoader? loader,
-		bool Function(double totalLineWidth, double lineWidthAlreadyUsed, double currentWordWidth)? shouldHyphenate,
-		TextStyle? style,
-		TextAlign? textAlign,
-		StrutStyle? strutStyle,
-		TextDirection? textDirection,
-		Locale? locale,
-		bool? softWrap,
-		TextOverflow? overflow,
-		double? textScaleFactor,
-		int? maxLines,
-		String? semanticsLabel,
-		TextWidthBasis? textWidthBasis,
-		Color? selectionColor,
-		Key? key,
-	}) {
-		return AutoHyphenatingText._(
-			text: text,
-			words: text.split(" "),
-			shouldHyphenate: shouldHyphenate,
-			loader: loader,
-			style: style,
-			strutStyle: strutStyle,
-			textAlign: textAlign,
-			textDirection: textDirection,
-			overflow: overflow,
-			locale: locale,
-			softWrap: softWrap,
-			textScaleFactor: textScaleFactor,
-			maxLines: maxLines,
-			semanticsLabel: semanticsLabel,
-			textWidthBasis: textWidthBasis,
-			selectionColor: selectionColor,
-			key: key,
-		);
-	}
-
-	const AutoHyphenatingText._({
-		required this.text,
-		required this.words,
+	const AutoHyphenatingText(
+		this.text, {
 		this.shouldHyphenate,
 		this.loader,
 		this.style,
@@ -72,7 +32,6 @@ class AutoHyphenatingText extends StatelessWidget {
 	final String text;
 	final ResourceLoader? loader;
 	final bool Function(double totalLineWidth, double lineWidthAlreadyUsed, double currentWordWidth)? shouldHyphenate;
-	final List<String> words;
 	final TextStyle? style;
 	final TextAlign? textAlign;
 	final StrutStyle? strutStyle;
@@ -154,6 +113,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		return LayoutBuilder(
 				builder: (BuildContext context, BoxConstraints constraints) {
 
+			List<String> words = text.split(" ");
 			List<InlineSpan> texts = <InlineSpan>[];
 
 			assert(globalLoader != null, "AutoHyphenatingText not initialized! Remember to call initHyphenation().");
@@ -226,7 +186,7 @@ class AutoHyphenatingText extends StatelessWidget {
 			}
 
 			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
-			Widget text = RichText(
+			Widget richText = RichText(
 				textDirection: textDirection,
 				strutStyle: strutStyle,
 				locale: locale,
@@ -244,21 +204,21 @@ class AutoHyphenatingText extends StatelessWidget {
 			);
 
 			if (registrar != null) {
-				text = MouseRegion(
+				richText = MouseRegion(
 					cursor: SystemMouseCursors.text,
-					child: text,
+					child: richText,
 				);
 			}
 			if (semanticsLabel != null) {
-				text = Semantics(
+				richText = Semantics(
 					textDirection: textDirection,
 					label: semanticsLabel,
 					child: ExcludeSemantics(
-						child: text,
+						child: richText,
 					),
 				);
 			}
-			return text;
+			return richText;
 		});
 	}
 }
