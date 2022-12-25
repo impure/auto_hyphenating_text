@@ -2,7 +2,6 @@
 import 'package:auto_hyphenating_text/auto_hyphenating_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:state_groups/state_groups.dart';
 
 void main() async {
 	TestWidgetsFlutterBinding.ensureInitialized();
