@@ -18,7 +18,7 @@ void main() async {
 	// Checks 1e844e8cd0d9b2da0b4f3fc3ceee9df8a85d7f5a
 	testWidgets("Zero Width, Should Not Cause An Infinite Loop", (WidgetTester tester) async {
 		await tester.pumpWidget(
-			MaterialApp(
+			const MaterialApp(
 				home: Center(
 					child: SizedBox(
 						width: 0,
@@ -31,7 +31,7 @@ void main() async {
 	});
 
 	testWidgets("Build should be non-mutating", (WidgetTester tester) async {
-		AutoHyphenatingText text = AutoHyphenatingText("The CEO made some controversial statements yesterday.");
+		AutoHyphenatingText text = const AutoHyphenatingText("The CEO made some controversial statements yesterday.");
 		await tester.pumpWidget(
 			MaterialApp(
 				home: Center(
@@ -62,7 +62,7 @@ void main() async {
 	group("shouldHyphenate()", () {
 		testWidgets("No should hyphenate and always hyphenate should be the same", (WidgetTester tester) async {
 			await tester.pumpWidget(
-				MaterialApp(
+				const MaterialApp(
 					home: Center(
 						child: SizedBox(
 							width: 700,
@@ -129,12 +129,12 @@ void main() async {
 					),
 				),
 			);
-			expect(getText(), "TThe CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
+			expect(getText(), "The CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
 		});
 
 		testWidgets("Only hyphenate words if not starting a line with them", (WidgetTester tester) async {
 			await tester.pumpWidget(
-				MaterialApp(
+				const MaterialApp(
 					home: Center(
 						child: SizedBox(
 							width: 300,
@@ -169,7 +169,7 @@ void main() async {
 	testWidgets("Throws assertion error if not initialized", (WidgetTester tester) async {
 		globalLoader = null;
 		await tester.pumpWidget(
-			MaterialApp(
+			const MaterialApp(
 				home: Center(
 					child: SizedBox(
 						width: 0,
@@ -184,7 +184,7 @@ void main() async {
 
 	testWidgets("Small Lines, Should Not Cause An Infinite Loop", (WidgetTester tester) async {
 		await tester.pumpWidget(
-			MaterialApp(
+			const MaterialApp(
 				home: Center(
 					child: SizedBox(
 						width: 100,
@@ -198,7 +198,7 @@ void main() async {
 	// Checks 274869ad6f4323e12005301c6b4916f5f0233ba2
 	testWidgets("Small Lines, Should Hyphenate 'Woodchuck'", (WidgetTester tester) async {
 		await tester.pumpWidget(
-			MaterialApp(
+			const MaterialApp(
 				home: Center(
 					child: SizedBox(
 						width: 400,
@@ -213,7 +213,7 @@ void main() async {
 
 	testWidgets("No Extra Space At The End", (WidgetTester tester) async {
 		await tester.pumpWidget(
-			MaterialApp(
+			const MaterialApp(
 				home: Center(
 					child: SizedBox(
 						width: 100,
@@ -227,7 +227,7 @@ void main() async {
 
 	testWidgets("Should Not Generate Extra Newlines", (WidgetTester tester) async {
 		await tester.pumpWidget(
-			MaterialApp(
+			const MaterialApp(
 				home: Center(
 					child: SizedBox(
 						width: 300,
