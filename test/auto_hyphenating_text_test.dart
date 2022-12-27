@@ -1,6 +1,7 @@
 
 import 'package:auto_hyphenating_text/auto_hyphenating_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
@@ -245,11 +246,23 @@ void main() async {
 				home: Center(
 					child: SizedBox(
 						width: 400,
+						child: Text("How much wood could a woodchuck chuck if a woodchuck could chuck wood?"),
+					),
+				),
+			),
+		);
+		final SemanticsNode textNode = tester.getSemantics(find.byType(RichText));
+		await tester.pumpWidget(
+			const MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 400,
 						child: AutoHyphenatingText("How much wood could a woodchuck chuck if a woodchuck could chuck wood?"),
 					),
 				),
 			),
 		);
 		expect(tester.getSemantics(find.byType(RichText)).label, "How much wood could a woodchuck chuck if a woodchuck could chuck wood?");
+		expect(textNode.label, tester.getSemantics(find.byType(RichText)).label);
 	});
 }
