@@ -209,16 +209,13 @@ class AutoHyphenatingText extends StatelessWidget {
 					child: richText,
 				);
 			}
-			if (semanticsLabel != null) {
-				richText = Semantics(
-					textDirection: textDirection,
-					label: semanticsLabel,
-					child: ExcludeSemantics(
-						child: richText,
-					),
-				);
-			}
-			return richText;
+			return Semantics(
+				textDirection: textDirection,
+				label: semanticsLabel ?? text,
+				child: ExcludeSemantics(
+					child: richText,
+				),
+			);
 		});
 	}
 }

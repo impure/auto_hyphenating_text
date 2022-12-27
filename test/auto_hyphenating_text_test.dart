@@ -238,4 +238,18 @@ void main() async {
 		);
 		expect(getText().replaceAll(" ", "").contains("\\n\\n"), false);
 	});
+
+	testWidgets("Should Use Correct Semantics", (WidgetTester tester) async {
+		await tester.pumpWidget(
+			const MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 400,
+						child: AutoHyphenatingText("How much wood could a woodchuck chuck if a woodchuck could chuck wood?"),
+					),
+				),
+			),
+		);
+		expect(tester.getSemantics(find.byType(RichText)).label, "How much wood could a woodchuck chuck if a woodchuck could chuck wood?");
+	});
 }
