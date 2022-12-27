@@ -1,3 +1,7 @@
+## 0.0.4
+
+- Fixed incorrect semantics
+
 ## 0.0.3
 
 - Fixed `build()` modifying text which could result in weird behaviour if Flutter is forced to rebuild the widget (visible when going home and returning to the app on iOS)
