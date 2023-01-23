@@ -9,6 +9,7 @@ void main() async {
 	await initHyphenation();
 
 	String getText() {
+		expect(find.byType(RichText), findsOneWidget);
 		String text = find.byType(RichText).toString();
 		text = text.substring(text.indexOf("RichText") + "RichText".length + 1);
 		text = text.substring(text.indexOf("\"", text.indexOf("RichText") + "RichText".length + 1) + 1);
@@ -60,7 +61,7 @@ void main() async {
 		expect(getText(), "The CEO made\\nsome contro‐\\nversial state‐\\nments yester‐\\nday.");
 	});
 
-	group("shouldHyphenate()", () {
+	group("shouldHyphenate", () {
 		testWidgets("No should hyphenate and always hyphenate should be the same", (WidgetTester tester) async {
 			await tester.pumpWidget(
 				const MaterialApp(
