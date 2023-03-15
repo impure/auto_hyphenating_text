@@ -134,6 +134,22 @@ void main() async {
 			expect(getText(), "The CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
 		});
 
+		testWidgets("Don't insert redundant hyphens", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				const MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 400,
+							child: AutoHyphenatingText(
+								"And it would make it much more suitable for mission-critical applications.",
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), r"And it\nwould\nmake it\nmuch\nmore\nsuitable\nfor mis‐\nsion-\ncritical\napplica‐\ntions.");
+		});
+
 		testWidgets("Only hyphenate words if not starting a line with them", (WidgetTester tester) async {
 			await tester.pumpWidget(
 				const MaterialApp(

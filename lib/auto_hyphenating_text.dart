@@ -52,8 +52,13 @@ class AutoHyphenatingText extends StatelessWidget {
 			 buffer.write(syllables[i]);
 		 }
 
-		 buffer.write("‐");
-		 return buffer.toString();
+		 // Only write the hyphen if the character is not punctuation
+		 String returnString = buffer.toString();
+		 if (returnString.isEmpty || !RegExp(r'\p{P}', unicode: true).hasMatch(returnString[returnString.length - 1])) {
+			 return "$returnString‐";
+		 }
+
+		 return returnString;
 	}
 
 	 String mergeSyllablesBack(List<String> syllables, int indicesToMergeInclusive) {
