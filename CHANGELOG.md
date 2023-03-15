@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Now if we hyphenate right after a punctuation character do not add another hyphen
+
 ## 0.0.4
 
 - Fixed incorrect semantics
