@@ -134,25 +134,64 @@ void main() async {
 			expect(getText(), "The CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
 		});
 
-		testWidgets("Max lines given", (WidgetTester tester) async {
-			await tester.pumpWidget(
-				MaterialApp(
-					home: Center(
-						child: SizedBox(
-							width: 500,
-							child: AutoHyphenatingText(
-								"The CEO made some controversial statements yesterday.",
-								maxLines: 2,
-								shouldHyphenate: (double totalWidth, __, double wordWidth) {
-									expect(totalWidth, 500);
-									return wordWidth > 400;
-								},
+		group("Max lines", () {
+			testWidgets("No hyphenation max lines given", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					MaterialApp(
+						home: Center(
+							child: SizedBox(
+								width: 500,
+								child: AutoHyphenatingText(
+									"The CEO made some controversial statements yesterday.",
+									maxLines: 2,
+									shouldHyphenate: (double totalWidth, __, double wordWidth) {
+										expect(totalWidth, 500);
+										return wordWidth > 400;
+									},
+								),
 							),
 						),
 					),
-				),
-			);
-			expect(getText(), "The CEO\\nmade some");
+				);
+				expect(getText(), "The CEO\\nmade some");
+			});
+
+			testWidgets("Hyphenation max lines given (two lines)", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					MaterialApp(
+						home: Center(
+							child: SizedBox(
+								width: 	1500,
+								child: AutoHyphenatingText(
+									"The CEO made some controversial statements yesterday.",
+									maxLines: 2,
+									shouldHyphenate: (double totalWidth, __, double wordWidth) {
+										return wordWidth > 400;
+									},
+								),
+							),
+						),
+					),
+				);
+				expect(getText(), "The CEO made\\nsome controver‐");
+			});
+
+			testWidgets("Hyphenation max lines given (one line)", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					const MaterialApp(
+						home: Center(
+							child: SizedBox(
+								width: 300,
+								child: AutoHyphenatingText(
+									"A buffalo buffalo can buffalo buffalo buffalo",
+									maxLines: 1,
+								),
+							),
+						),
+					),
+				);
+				expect(getText(), "A buf‐");
+			});
 		});
 
 		testWidgets("Don't insert redundant hyphens", (WidgetTester tester) async {

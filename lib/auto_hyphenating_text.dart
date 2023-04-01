@@ -164,6 +164,7 @@ class AutoHyphenatingText extends StatelessWidget {
 						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse)));
 						words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
+						lines++;
 						if (maxLines != null && lines >= maxLines!) {
 							break;
 						}
