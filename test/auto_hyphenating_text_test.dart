@@ -134,6 +134,27 @@ void main() async {
 			expect(getText(), "The CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
 		});
 
+		testWidgets("Max lines given", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 500,
+							child: AutoHyphenatingText(
+								"The CEO made some controversial statements yesterday.",
+								maxLines: 2,
+								shouldHyphenate: (double totalWidth, __, double wordWidth) {
+									expect(totalWidth, 500);
+									return wordWidth > 400;
+								},
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), "The CEO\\nmade some");
+		});
+
 		testWidgets("Don't insert redundant hyphens", (WidgetTester tester) async {
 			await tester.pumpWidget(
 				const MaterialApp(

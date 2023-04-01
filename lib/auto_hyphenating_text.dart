@@ -152,22 +152,22 @@ class AutoHyphenatingText extends StatelessWidget {
 							if (texts.last == const TextSpan(text: " ")) {
 								texts.removeLast();
 							}
-							texts.add(const TextSpan(text: "\n"));
 							currentLineSpaceUsed = 0;
 							lines++;
 							if (maxLines != null && lines >= maxLines!) {
 								break;
 							}
+							texts.add(const TextSpan(text: "\n"));
 						}
 						continue;
 					} else {
 						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse)));
 						words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
-						texts.add(const TextSpan(text: "\n"));
 						if (maxLines != null && lines >= maxLines!) {
 							break;
 						}
+						texts.add(const TextSpan(text: "\n"));
 						continue;
 					}
 				}
@@ -180,12 +180,12 @@ class AutoHyphenatingText extends StatelessWidget {
 						if (texts.last == const TextSpan(text: " ")) {
 							texts.removeLast();
 						}
-						texts.add(const TextSpan(text: "\n"));
 						currentLineSpaceUsed = 0;
 						lines++;
 						if (maxLines != null && lines >= maxLines!) {
 							break;
 						}
+						texts.add(const TextSpan(text: "\n"));
 					}
 				}
 			}

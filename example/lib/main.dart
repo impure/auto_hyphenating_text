@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: AutoHyphenatingText('Resize this window to see autohyphenating text in action.', style: Theme.of(context).textTheme.titleLarge),
+        child: AutoHyphenatingText('Resize this window to see autohyphenating text in action.', style: Theme.of(context).textTheme.titleLarge, maxLines: 2),
       ),
     );
   }
