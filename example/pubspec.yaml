@@ -34,6 +34,8 @@ dependencies:
   auto_hyphenating_text:
     path: ../
 
+  hyphenator_impure: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

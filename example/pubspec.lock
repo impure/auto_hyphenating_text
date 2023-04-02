@@ -75,7 +75,7 @@ packages:
     source: sdk
     version: "0.0.0"
   hyphenator_impure:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: hyphenator_impure
       sha256: "10b71053b42b1c9e150cd1b19b0baffe1d51734c89abda45d7e927688e0d77da"
