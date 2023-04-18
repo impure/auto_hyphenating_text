@@ -114,6 +114,24 @@ void main() async {
 			expect(getText(), "The CEO made\\nsome\\ncontroversial\\nstatements\\nyesterday.");
 		});
 
+		testWidgets("Ellipsis", (WidgetTester tester) async {
+			await tester.pumpWidget(
+				const MaterialApp(
+					home: Center(
+						child: SizedBox(
+							width: 500,
+							height: 500,
+							child: AutoHyphenatingText(
+								"The CEO made some controversial statements yesterday.",
+								overflow: TextOverflow.ellipsis,
+							),
+						),
+					),
+				),
+			);
+			expect(getText(), "The CEO…");
+		});
+
 		testWidgets("Only hyphenate long words", (WidgetTester tester) async {
 			await tester.pumpWidget(
 				MaterialApp(

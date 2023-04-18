@@ -52,24 +52,30 @@ class AutoHyphenatingText extends StatelessWidget {
 			 buffer.write(syllables[i]);
 		 }
 
+		 if (overflow == TextOverflow.ellipsis) {
+			 buffer.write("…");
+		 }
+
 		 // Only write the hyphen if the character is not punctuation
 		 String returnString = buffer.toString();
-		 if (returnString.isEmpty || !RegExp(r'\p{P}', unicode: true).hasMatch(returnString[returnString.length - 1])) {
+		 if (returnString.isEmpty || !RegExp("\\p{P}", unicode: true).hasMatch(returnString[returnString.length - 1])) {
 			 return "$returnString‐";
 		 }
 
 		 return returnString;
 	}
 
-	 String mergeSyllablesBack(List<String> syllables, int indicesToMergeInclusive) {
-		 StringBuffer buffer = StringBuffer();
+	String mergeSyllablesBack(List<String> syllables, int indicesToMergeInclusive) {
+		StringBuffer buffer = StringBuffer();
 
-		 for (int i = indicesToMergeInclusive + 1; i < syllables.length; i++) {
-			 buffer.write(syllables[i]);
-		 }
+		for (int i = indicesToMergeInclusive + 1; i < syllables.length; i++) {
+			buffer.write(syllables[i]);
+		}
 
-		 return buffer.toString();
-	 }
+		return buffer.toString();
+	}
+
+	int? effectiveMaxLines() => overflow == TextOverflow.ellipsis ? 1 : maxLines;
 
 	@override
 	Widget build(BuildContext context) {
@@ -154,7 +160,7 @@ class AutoHyphenatingText extends StatelessWidget {
 							}
 							currentLineSpaceUsed = 0;
 							lines++;
-							if (maxLines != null && lines >= maxLines!) {
+							if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
 								break;
 							}
 							texts.add(const TextSpan(text: "\n"));
@@ -165,7 +171,7 @@ class AutoHyphenatingText extends StatelessWidget {
 						words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
 						lines++;
-						if (maxLines != null && lines >= maxLines!) {
+						if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
 							break;
 						}
 						texts.add(const TextSpan(text: "\n"));
@@ -183,12 +189,16 @@ class AutoHyphenatingText extends StatelessWidget {
 						}
 						currentLineSpaceUsed = 0;
 						lines++;
-						if (maxLines != null && lines >= maxLines!) {
+						if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
 							break;
 						}
 						texts.add(const TextSpan(text: "\n"));
 					}
 				}
+			}
+
+			if (overflow == TextOverflow.ellipsis) {
+				texts.add(const TextSpan(text: "…"));
 			}
 
 			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
