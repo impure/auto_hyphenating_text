@@ -52,10 +52,6 @@ class AutoHyphenatingText extends StatelessWidget {
 			 buffer.write(syllables[i]);
 		 }
 
-		 if (overflow == TextOverflow.ellipsis) {
-			 buffer.write("…");
-		 }
-
 		 // Only write the hyphen if the character is not punctuation
 		 String returnString = buffer.toString();
 		 if (returnString.isEmpty || !RegExp("\\p{P}", unicode: true).hasMatch(returnString[returnString.length - 1])) {
@@ -81,6 +77,11 @@ class AutoHyphenatingText extends StatelessWidget {
 	Widget build(BuildContext context) {
 
 		double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
+
+			if (overflow == TextOverflow.ellipsis) {
+				text += "…";
+			}
+
 			final TextPainter textPainter = TextPainter(
 				text: TextSpan(text: text, style: style),
 				textScaleFactor: scaleFactor ?? MediaQuery.of(context).textScaleFactor,

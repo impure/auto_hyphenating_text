@@ -114,22 +114,40 @@ void main() async {
 			expect(getText(), "The CEO made\\nsome\\ncontroversial\\nstatements\\nyesterday.");
 		});
 
-		testWidgets("Ellipsis", (WidgetTester tester) async {
-			await tester.pumpWidget(
-				const MaterialApp(
-					home: Center(
-						child: SizedBox(
-							width: 500,
-							height: 500,
-							child: AutoHyphenatingText(
-								"The CEO made some controversial statements yesterday.",
-								overflow: TextOverflow.ellipsis,
+		group("Ellipsis", () {
+			testWidgets("Basic", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					const MaterialApp(
+						home: Center(
+							child: SizedBox(
+								width: 500,
+								height: 500,
+								child: AutoHyphenatingText(
+									"The CEO made some controversial statements yesterday.",
+									overflow: TextOverflow.ellipsis,
+								),
 							),
 						),
 					),
-				),
-			);
-			expect(getText(), "The CEO…");
+				);
+				expect(getText(), "The CEO…");
+			});
+
+			testWidgets("No double ellipsis", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					const MaterialApp(
+						home: Center(
+							child: SizedBox(
+								child: AutoHyphenatingText(
+									"The women's soccer team plays this Wednesday.",
+									overflow: TextOverflow.ellipsis,
+								),
+							),
+						),
+					),
+				);
+				expect(getText(), "The women's…");
+			});
 		});
 
 		testWidgets("Only hyphenate long words", (WidgetTester tester) async {
