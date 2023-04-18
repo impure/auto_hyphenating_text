@@ -20,7 +20,6 @@ class AutoHyphenatingText extends StatelessWidget {
 		this.textDirection,
 		this.locale,
 		this.softWrap,
-		this.overflow,
 		this.textScaleFactor,
 		this.maxLines,
 		this.semanticsLabel,
@@ -38,7 +37,6 @@ class AutoHyphenatingText extends StatelessWidget {
 	final TextDirection? textDirection;
 	final Locale? locale;
 	final bool? softWrap;
-	final TextOverflow? overflow;
 	final double? textScaleFactor;
 	final int? maxLines;
 	final String? semanticsLabel;
@@ -71,14 +69,14 @@ class AutoHyphenatingText extends StatelessWidget {
 		return buffer.toString();
 	}
 
-	int? effectiveMaxLines() => overflow == TextOverflow.ellipsis ? 1 : maxLines;
+	int? effectiveMaxLines() => style?.overflow == TextOverflow.ellipsis ? 1 : maxLines;
 
 	@override
 	Widget build(BuildContext context) {
 
 		double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
 
-			if (overflow == TextOverflow.ellipsis) {
+			if (style?.overflow == TextOverflow.ellipsis) {
 				text += "…";
 			}
 
@@ -198,7 +196,7 @@ class AutoHyphenatingText extends StatelessWidget {
 				}
 			}
 
-			if (overflow == TextOverflow.ellipsis) {
+			if (style?.overflow == TextOverflow.ellipsis) {
 				texts.add(const TextSpan(text: "…"));
 			}
 
@@ -208,7 +206,7 @@ class AutoHyphenatingText extends StatelessWidget {
 				strutStyle: strutStyle,
 				locale: locale,
 				softWrap: softWrap ?? true,
-				overflow: overflow ?? TextOverflow.clip,
+				overflow: style?.overflow ?? TextOverflow.clip,
 				textScaleFactor: textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
 				textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
 				selectionColor: selectionColor,
