@@ -77,11 +77,6 @@ class AutoHyphenatingText extends StatelessWidget {
 	Widget build(BuildContext context) {
 
 		double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
-
-			if (overflow == TextOverflow.ellipsis) {
-				text += "…";
-			}
-
 			final TextPainter textPainter = TextPainter(
 				text: TextSpan(text: text, style: style),
 				textScaleFactor: scaleFactor ?? MediaQuery.of(context).textScaleFactor,
@@ -138,11 +133,13 @@ class AutoHyphenatingText extends StatelessWidget {
 			double currentLineSpaceUsed = 0;
 			int lines = 0;
 
+			double endBuffer = style?.overflow == TextOverflow.ellipsis ? getTextWidth("…", style, textDirection, textScaleFactor) : 0;
+
 			for (int i = 0; i < words.length; i++) {
 
 				double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, textScaleFactor);
 
-				if (currentLineSpaceUsed + wordWidth < constraints.maxWidth) {
+				if (currentLineSpaceUsed + wordWidth < constraints.maxWidth - endBuffer) {
 					texts.add(TextSpan(text: words[i]));
 					currentLineSpaceUsed += wordWidth;
 				} else {
