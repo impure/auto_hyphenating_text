@@ -133,7 +133,7 @@ void main() async {
 				expect(getText(), "The CEO…");
 			});
 
-			testWidgets("No double ellipsis", (WidgetTester tester) async {
+			testWidgets("Hyphenation and ellipsis", (WidgetTester tester) async {
 				await tester.pumpWidget(
 					const MaterialApp(
 						home: Center(
@@ -146,7 +146,7 @@ void main() async {
 						),
 					),
 				);
-				expect(getText(), "The women's…");
+				expect(getText(), "The women's soc‐…");
 			});
 		});
 
