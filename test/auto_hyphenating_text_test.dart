@@ -166,6 +166,24 @@ void main() async {
 				);
 				expect(getText(), "The women's soc‐…");
 			});
+
+			testWidgets("Ellipsis And Max Lines", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					const MaterialApp(
+						home: Center(
+							child: SizedBox(
+								width: 500,
+								child: AutoHyphenatingText(
+									"The CEO made some controversial statements yesterday.",
+									maxLines: 2,
+									overflow: TextOverflow.ellipsis,
+								),
+							),
+						),
+					),
+				);
+				expect(getText(), "The CEO\\nmade some…");
+			});
 		});
 
 		testWidgets("Only hyphenate long words", (WidgetTester tester) async {

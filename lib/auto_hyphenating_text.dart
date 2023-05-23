@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hyphenator_impure/hyphenator.dart';
@@ -73,7 +75,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		return buffer.toString();
 	}
 
-	int? effectiveMaxLines() => overflow == TextOverflow.ellipsis ? 1 : maxLines;
+	int? effectiveMaxLines() => overflow == TextOverflow.ellipsis && maxLines == null ? 1 : maxLines;
 
 	@override
 	Widget build(BuildContext context) {
