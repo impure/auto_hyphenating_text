@@ -26,7 +26,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		this.semanticsLabel,
 		this.textWidthBasis,
 		this.selectionColor,
-    this.seperatorSymbol = '‐',
+		this.seperatorSymbol = '‐',
 		super.key,
 	});
 
@@ -45,7 +45,7 @@ class AutoHyphenatingText extends StatelessWidget {
 	final String? semanticsLabel;
 	final TextWidthBasis? textWidthBasis;
 	final Color? selectionColor;
-  final String? seperatorSymbol;
+	final String? seperatorSymbol;
 
 	String mergeSyllablesFront(List<String> syllables, int indicesToMergeInclusive) {
 		 StringBuffer buffer = StringBuffer();
