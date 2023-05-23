@@ -26,6 +26,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		this.semanticsLabel,
 		this.textWidthBasis,
 		this.selectionColor,
+    this.seperatorSymbol = '‐',
 		super.key,
 	});
 
@@ -44,6 +45,7 @@ class AutoHyphenatingText extends StatelessWidget {
 	final String? semanticsLabel;
 	final TextWidthBasis? textWidthBasis;
 	final Color? selectionColor;
+  final String? seperatorSymbol;
 
 	String mergeSyllablesFront(List<String> syllables, int indicesToMergeInclusive) {
 		 StringBuffer buffer = StringBuffer();
@@ -55,7 +57,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		 // Only write the hyphen if the character is not punctuation
 		 String returnString = buffer.toString();
 		 if (returnString.isEmpty || !RegExp("\\p{P}", unicode: true).hasMatch(returnString[returnString.length - 1])) {
-			 return "$returnString‐";
+			 return "$returnString$seperatorSymbol";
 		 }
 
 		 return returnString;
