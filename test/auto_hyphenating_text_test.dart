@@ -133,6 +133,24 @@ void main() async {
 				expect(getText(), "The CEO…");
 			});
 
+			testWidgets("No Ellipsis Required", (WidgetTester tester) async {
+				await tester.pumpWidget(
+					const MaterialApp(
+						home: Center(
+							child: SizedBox(
+								width: 500,
+								height: 500,
+								child: AutoHyphenatingText(
+									"Hello",
+									overflow: TextOverflow.ellipsis,
+								),
+							),
+						),
+					),
+				);
+				expect(getText(), "Hello");
+			});
+
 			testWidgets("Hyphenation and ellipsis", (WidgetTester tester) async {
 				await tester.pumpWidget(
 					const MaterialApp(

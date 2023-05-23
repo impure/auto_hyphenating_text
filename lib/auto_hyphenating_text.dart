@@ -161,6 +161,9 @@ class AutoHyphenatingText extends StatelessWidget {
 							currentLineSpaceUsed = 0;
 							lines++;
 							if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
+								if (overflow == TextOverflow.ellipsis) {
+									texts.add(const TextSpan(text: "…"));
+								}
 								break;
 							}
 							texts.add(const TextSpan(text: "\n"));
@@ -172,6 +175,9 @@ class AutoHyphenatingText extends StatelessWidget {
 						currentLineSpaceUsed = 0;
 						lines++;
 						if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
+							if (overflow == TextOverflow.ellipsis) {
+								texts.add(const TextSpan(text: "…"));
+							}
 							break;
 						}
 						texts.add(const TextSpan(text: "\n"));
@@ -190,15 +196,14 @@ class AutoHyphenatingText extends StatelessWidget {
 						currentLineSpaceUsed = 0;
 						lines++;
 						if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
+							if (overflow == TextOverflow.ellipsis) {
+								texts.add(const TextSpan(text: "…"));
+							}
 							break;
 						}
 						texts.add(const TextSpan(text: "\n"));
 					}
 				}
-			}
-
-			if (overflow == TextOverflow.ellipsis) {
-				texts.add(const TextSpan(text: "…"));
 			}
 
 			final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
