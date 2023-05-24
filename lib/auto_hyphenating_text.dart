@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hyphenator_impure/hyphenator.dart';
 
+/// This object is used to tell us acceptable hyphenation positions
+/// It is the default loader used unless a custom one is provided
 ResourceLoader? globalLoader;
 
+/// Inits the default global hyphenation loader. If this is omitted a custom hyphenation loader must be provided.
 Future<void> initHyphenation([DefaultResourceLoaderLanguage language = DefaultResourceLoaderLanguage.enUs]) async {
 	globalLoader = await DefaultResourceLoader.load(language);
 }
 
+/// A replacement for the default text object which supports hyphenation.
 class AutoHyphenatingText extends StatelessWidget {
 	const AutoHyphenatingText(
 		this.text, {
@@ -26,13 +30,20 @@ class AutoHyphenatingText extends StatelessWidget {
 		this.semanticsLabel,
 		this.textWidthBasis,
 		this.selectionColor,
-		this.seperatorSymbol = '‐',
+		this.hyphenationCharacter = '‐',
 		super.key,
 	});
 
 	final String text;
+
+	/// An object that allows for computing acceptable hyphenation locations.
 	final ResourceLoader? loader;
+
+	/// A function to tell us if we should apply hyphenation. If not given we will always hyphenate if possible.
 	final bool Function(double totalLineWidth, double lineWidthAlreadyUsed, double currentWordWidth)? shouldHyphenate;
+
+	final String hyphenationCharacter;
+
 	final TextStyle? style;
 	final TextAlign? textAlign;
 	final StrutStyle? strutStyle;
@@ -45,7 +56,6 @@ class AutoHyphenatingText extends StatelessWidget {
 	final String? semanticsLabel;
 	final TextWidthBasis? textWidthBasis;
 	final Color? selectionColor;
-	final String? seperatorSymbol;
 
 	String mergeSyllablesFront(List<String> syllables, int indicesToMergeInclusive) {
 		 StringBuffer buffer = StringBuffer();
@@ -57,7 +67,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		 // Only write the hyphen if the character is not punctuation
 		 String returnString = buffer.toString();
 		 if (returnString.isEmpty || !RegExp("\\p{P}", unicode: true).hasMatch(returnString[returnString.length - 1])) {
-			 return "$returnString$seperatorSymbol";
+			 return "$returnString$hyphenationCharacter";
 		 }
 
 		 return returnString;

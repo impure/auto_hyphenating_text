@@ -290,7 +290,7 @@ void main() async {
 							width: 400,
 							child: AutoHyphenatingText(
 								"And it would make it much more suitable for mission-critical applications.",
-								seperatorSymbol: "😊",
+								hyphenationCharacter: "😊",
 							),
 						),
 					),

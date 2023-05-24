@@ -1,5 +1,5 @@
 name: auto_hyphenating_text
-description: A text box that automatically adds hyphenation.
+description: A text widget that automatically adds hyphenation. It was designed as a drop-in replacement for the default text widget.
 version: 0.1.0
 homepage: https://github.com/impure/auto_hyphenating_text
 
