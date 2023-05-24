@@ -1,6 +1,4 @@
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hyphenator_impure/hyphenator.dart';
@@ -117,7 +115,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		if (style == null || style!.inherit) {
 			effectiveTextStyle = defaultTextStyle.style.merge(style);
 		}
-		if (MediaQuery.boldTextOverride(context)) {
+		if (MediaQuery.boldTextOf(context)) {
 			effectiveTextStyle = effectiveTextStyle!.merge(const TextStyle(fontWeight: FontWeight.bold));
 		}
 
