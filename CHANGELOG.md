@@ -1,3 +1,8 @@
+## 0.1.0
+
+- Now `TextOverflow.ellipsis` should work properly
+- Hyphenation character can be customized (#8)
+
 ## 0.0.6
 
 - Fixed a bug where max lines would not work properly if we had hyphenation
