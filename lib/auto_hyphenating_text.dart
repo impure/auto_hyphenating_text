@@ -244,23 +244,35 @@ class AutoHyphenatingText extends StatelessWidget {
       }
 
       final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
-      Widget richText = RichText(
+      Widget richText = SelectableText.rich(
+        TextSpan(locale: locale, children: texts),
         textDirection: textDirection,
         strutStyle: strutStyle,
-        locale: locale,
-        softWrap: softWrap ?? true,
-        overflow: overflow ?? TextOverflow.clip,
         textScaleFactor:
             textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
         textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
-        selectionColor: selectionColor,
         textAlign: textAlign ?? TextAlign.start,
-        selectionRegistrar: registrar,
-        text: TextSpan(
-          style: effectiveTextStyle,
-          children: texts,
-        ),
+        style: style,
+        maxLines: maxLines,
       );
+
+      // Widget richText = RichText(
+      //   textDirection: textDirection,
+      //   strutStyle: strutStyle,
+      //   locale: locale,
+      //   softWrap: softWrap ?? true,
+      //   overflow: overflow ?? TextOverflow.clip,
+      //   textScaleFactor:
+      //       textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+      //   textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
+      //   selectionColor: selectionColor,
+      //   textAlign: textAlign ?? TextAlign.start,
+      //   selectionRegistrar: registrar,
+      //   text: TextSpan(
+      //     style: effectiveTextStyle,
+      //     children: texts,
+      //   ),
+      // );
 
       if (registrar != null) {
         richText = MouseRegion(
