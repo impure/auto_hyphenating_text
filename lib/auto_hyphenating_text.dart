@@ -32,6 +32,7 @@ class AutoHyphenatingText extends StatelessWidget {
     this.textWidthBasis,
     this.selectionColor,
     this.hyphenationCharacter = '‐',
+    this.selectable = false,
     super.key,
   });
 
@@ -58,6 +59,7 @@ class AutoHyphenatingText extends StatelessWidget {
   final String? semanticsLabel;
   final TextWidthBasis? textWidthBasis;
   final Color? selectionColor;
+  final bool selectable;
 
   String mergeSyllablesFront(
       List<String> syllables, int indicesToMergeInclusive) {
@@ -244,36 +246,39 @@ class AutoHyphenatingText extends StatelessWidget {
       }
 
       final SelectionRegistrar? registrar = SelectionContainer.maybeOf(context);
-      Widget richText = SelectableText.rich(
-        TextSpan(locale: locale, children: texts),
-        textDirection: textDirection,
-        strutStyle: strutStyle,
-        textScaleFactor:
-            textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
-        textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
-        textAlign: textAlign ?? TextAlign.start,
-        style: style,
-        maxLines: maxLines,
-      );
+      late Widget richText;
 
-      // Widget richText = RichText(
-      //   textDirection: textDirection,
-      //   strutStyle: strutStyle,
-      //   locale: locale,
-      //   softWrap: softWrap ?? true,
-      //   overflow: overflow ?? TextOverflow.clip,
-      //   textScaleFactor:
-      //       textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
-      //   textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
-      //   selectionColor: selectionColor,
-      //   textAlign: textAlign ?? TextAlign.start,
-      //   selectionRegistrar: registrar,
-      //   text: TextSpan(
-      //     style: effectiveTextStyle,
-      //     children: texts,
-      //   ),
-      // );
-
+      if (selectable) {
+        richText = SelectableText.rich(
+          TextSpan(locale: locale, children: texts),
+          textDirection: textDirection,
+          strutStyle: strutStyle,
+          textScaleFactor:
+              textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+          textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
+          textAlign: textAlign ?? TextAlign.start,
+          style: style,
+          maxLines: maxLines,
+        );
+      } else {
+        richText = RichText(
+          textDirection: textDirection,
+          strutStyle: strutStyle,
+          locale: locale,
+          softWrap: softWrap ?? true,
+          overflow: overflow ?? TextOverflow.clip,
+          textScaleFactor:
+              textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+          textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
+          selectionColor: selectionColor,
+          textAlign: textAlign ?? TextAlign.start,
+          selectionRegistrar: registrar,
+          text: TextSpan(
+            style: effectiveTextStyle,
+            children: texts,
+          ),
+        );
+      }
       if (registrar != null) {
         richText = MouseRegion(
           cursor: SystemMouseCursors.text,
