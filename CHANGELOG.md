@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Text can now be selectable using the new `selectable` parameter (#9)
+
 ## 0.1.0
 
 - Now `TextOverflow.ellipsis` should work properly
