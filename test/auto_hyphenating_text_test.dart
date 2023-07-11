@@ -164,7 +164,7 @@ void main() async {
 						),
 					),
 				);
-				expect(getText(), "The women's soc‐…");
+				expect(getText(), "The women's soc…");
 			});
 
 			testWidgets("Ellipsis And Max Lines", (WidgetTester tester) async {
