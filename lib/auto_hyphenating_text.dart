@@ -86,6 +86,8 @@ class AutoHyphenatingText extends StatelessWidget {
 
 	int? effectiveMaxLines() => overflow == TextOverflow.ellipsis && maxLines == null ? 1 : maxLines;
 
+	bool allowHyphenation(int lines) => overflow != TextOverflow.ellipsis || lines + 1 != effectiveMaxLines();
+
 	@override
 	Widget build(BuildContext context) {
 		double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
@@ -99,7 +101,7 @@ class AutoHyphenatingText extends StatelessWidget {
 		}
 
 		int? getLastSyllableIndex(List<String> syllables, double availableSpace, TextStyle? effectiveTextStyle, int lines) {
-			if (getTextWidth(mergeSyllablesFront(syllables, 0, allowHyphen: lines == effectiveMaxLines()), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+			if (getTextWidth(mergeSyllablesFront(syllables, 0, allowHyphen: allowHyphenation(lines)), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
 				return null;
 			}
 
@@ -109,7 +111,7 @@ class AutoHyphenatingText extends StatelessWidget {
 			while (lowerBound != upperBound - 1) {
 				int testIndex = ((lowerBound + upperBound) * 0.5).floor();
 
-				if (getTextWidth(mergeSyllablesFront(syllables, testIndex, allowHyphen: lines == effectiveMaxLines()), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+				if (getTextWidth(mergeSyllablesFront(syllables, testIndex, allowHyphen: allowHyphenation(lines)), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
 					upperBound = testIndex;
 				} else {
 					lowerBound = testIndex;
@@ -179,7 +181,7 @@ class AutoHyphenatingText extends StatelessWidget {
 						}
 						continue;
 					} else {
-						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse, allowHyphen: lines == effectiveMaxLines())));
+						texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse, allowHyphen: allowHyphenation(lines))));
 						words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
 						currentLineSpaceUsed = 0;
 						lines++;
