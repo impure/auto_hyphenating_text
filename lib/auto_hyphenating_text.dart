@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hyphenator_impure/hyphenator.dart';
 
+export 'package:hyphenator_impure/hyphenator.dart' show DefaultResourceLoader;
+
 /// This object is used to tell us acceptable hyphenation positions
 /// It is the default loader used unless a custom one is provided
 ResourceLoader? globalLoader;
