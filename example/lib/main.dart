@@ -1,6 +1,5 @@
 import 'package:auto_hyphenating_text/auto_hyphenating_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hyphenator_impure/hyphenator.dart';
 
 void main() {
 	runApp(const MyApp());
