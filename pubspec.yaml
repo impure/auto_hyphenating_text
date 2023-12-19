@@ -1,6 +1,6 @@
 name: auto_hyphenating_text
 description: A text widget that automatically adds hyphenation. It was designed as a drop-in replacement for the default text widget.
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/impure/auto_hyphenating_text
 
 screenshots:

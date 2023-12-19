@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Now if we have ellipsis disable hyphenation
+- Moved files around
+
 ## 0.1.1
 
 - Text can now be selectable using the new `selectable` parameter (#9)
