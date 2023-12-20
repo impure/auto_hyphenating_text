@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Now using the new `textScaler` introduced in Flutter 3.16 (requires Flutter 3.16)
+
 ## 0.1.3
 
 - Now soft hyphens are taken into consideration (#12)

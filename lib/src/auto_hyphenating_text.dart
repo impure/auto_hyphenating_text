@@ -24,7 +24,7 @@ class AutoHyphenatingText extends StatelessWidget {
         this.locale,
         this.softWrap,
         this.overflow,
-        this.textScaleFactor,
+        this.scaler,
         this.maxLines,
         this.semanticsLabel,
         this.textWidthBasis,
@@ -51,7 +51,7 @@ class AutoHyphenatingText extends StatelessWidget {
   final Locale? locale;
   final bool? softWrap;
   final TextOverflow? overflow;
-  final double? textScaleFactor;
+  final TextScaler? scaler;
   final int? maxLines;
   final String? semanticsLabel;
   final TextWidthBasis? textWidthBasis;
@@ -90,10 +90,10 @@ class AutoHyphenatingText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double getTextWidth(String text, TextStyle? style, TextDirection? direction, double? scaleFactor) {
+    double getTextWidth(String text, TextStyle? style, TextDirection? direction, TextScaler? scaler) {
       final TextPainter textPainter = TextPainter(
         text: TextSpan(text: text, style: style),
-        textScaleFactor: scaleFactor ?? MediaQuery.of(context).textScaleFactor,
+        textScaler: scaler ?? MediaQuery.of(context).textScaler,
         maxLines: 1,
         textDirection: direction ?? Directionality.of(context),
       )..layout();
@@ -101,7 +101,7 @@ class AutoHyphenatingText extends StatelessWidget {
     }
 
     int? getLastSyllableIndex(List<String> syllables, double availableSpace, TextStyle? effectiveTextStyle, int lines) {
-      if (getTextWidth(mergeSyllablesFront(syllables, 0, allowHyphen: allowHyphenation(lines)), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+      if (getTextWidth(mergeSyllablesFront(syllables, 0, allowHyphen: allowHyphenation(lines)), effectiveTextStyle, textDirection, scaler) > availableSpace) {
         return null;
       }
 
@@ -111,7 +111,7 @@ class AutoHyphenatingText extends StatelessWidget {
       while (lowerBound != upperBound - 1) {
         int testIndex = ((lowerBound + upperBound) * 0.5).floor();
 
-        if (getTextWidth(mergeSyllablesFront(syllables, testIndex, allowHyphen: allowHyphenation(lines)), effectiveTextStyle, textDirection, textScaleFactor) > availableSpace) {
+        if (getTextWidth(mergeSyllablesFront(syllables, testIndex, allowHyphen: allowHyphenation(lines)), effectiveTextStyle, textDirection, scaler) > availableSpace) {
           upperBound = testIndex;
         } else {
           lowerBound = testIndex;
@@ -140,11 +140,11 @@ class AutoHyphenatingText extends StatelessWidget {
         hyphenateSymbol: '_',
       );
 
-      double singleSpaceWidth = getTextWidth(" ", effectiveTextStyle, textDirection, textScaleFactor);
+      double singleSpaceWidth = getTextWidth(" ", effectiveTextStyle, textDirection, scaler);
       double currentLineSpaceUsed = 0;
       int lines = 0;
 
-      double endBuffer = style?.overflow == TextOverflow.ellipsis ? getTextWidth("…", style, textDirection, textScaleFactor) : 0;
+      double endBuffer = style?.overflow == TextOverflow.ellipsis ? getTextWidth("…", style, textDirection, scaler) : 0;
 
       List<String> hyphenateWordToListWrapper(String word) {
         if (word.contains("­")) {
@@ -159,7 +159,7 @@ class AutoHyphenatingText extends StatelessWidget {
       }
 
       for (int i = 0; i < words.length; i++) {
-        double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, textScaleFactor);
+        double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, scaler);
 
         if (currentLineSpaceUsed + wordWidth < constraints.maxWidth - endBuffer) {
           texts.add(TextSpan(text: words[i]));
@@ -237,8 +237,7 @@ class AutoHyphenatingText extends StatelessWidget {
           TextSpan(locale: locale, children: texts),
           textDirection: textDirection,
           strutStyle: strutStyle,
-          textScaleFactor:
-          textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+          textScaler: scaler ?? MediaQuery.of(context).textScaler,
           textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
           textAlign: textAlign ?? TextAlign.start,
           style: style,
@@ -251,8 +250,7 @@ class AutoHyphenatingText extends StatelessWidget {
           locale: locale,
           softWrap: softWrap ?? true,
           overflow: overflow ?? TextOverflow.clip,
-          textScaleFactor:
-          textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
+          textScaler: scaler ?? MediaQuery.of(context).textScaler,
           textWidthBasis: textWidthBasis ?? TextWidthBasis.parent,
           selectionColor: selectionColor,
           textAlign: textAlign ?? TextAlign.start,
