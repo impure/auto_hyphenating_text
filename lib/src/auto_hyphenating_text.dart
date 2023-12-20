@@ -146,6 +146,18 @@ class AutoHyphenatingText extends StatelessWidget {
 
       double endBuffer = style?.overflow == TextOverflow.ellipsis ? getTextWidth("…", style, textDirection, textScaleFactor) : 0;
 
+      List<String> hyphenateWordToListWrapper(String word) {
+        if (word.contains("­")) {
+          List<String> returnList = <String>[];
+          for (final String section in word.split("­")) {
+            returnList.addAll(hyphenator.hyphenateWordToList(section));
+          }
+          return returnList;
+        } else {
+          return hyphenator.hyphenateWordToList(word);
+        }
+      }
+
       for (int i = 0; i < words.length; i++) {
         double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, textScaleFactor);
 
@@ -155,7 +167,7 @@ class AutoHyphenatingText extends StatelessWidget {
         } else {
           final List<String> syllables = words[i].length == 1
               ? <String>[words[i]]
-              : hyphenator.hyphenateWordToList(words[i]);
+              : hyphenateWordToListWrapper(words[i]);
           final int? syllableToUse = words[i].length == 1
               ? null
               : getLastSyllableIndex(syllables, constraints.maxWidth - currentLineSpaceUsed, effectiveTextStyle, lines);

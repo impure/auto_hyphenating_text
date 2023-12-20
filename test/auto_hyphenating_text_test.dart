@@ -206,6 +206,35 @@ void main() async {
 			expect(getText(), "The CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
 		});
 
+		testWidgets("Soft hyphenation", (WidgetTester tester) async {
+
+			// No soft hyphen character, hyphenates normally
+			await tester.pumpWidget(
+				const MaterialApp(
+					home: OverflowBox(
+						maxWidth: 800,
+						child: AutoHyphenatingText(
+							"Stromeinspeisadzähler",
+						),
+					),
+				),
+			);
+			expect(getText(), "Stromein‐\\nspeisadzähler");
+
+			// With soft hyphen character, hyphenates at new position
+			await tester.pumpWidget(
+				const MaterialApp(
+					home: OverflowBox(
+						maxWidth: 800,
+						child: AutoHyphenatingText(
+							"Stromeinspeis­adzähler",
+						),
+					),
+				),
+			);
+			expect(getText(), "Stromeinspeis‐\\nadzähler");
+		});
+
 		group("Max lines", () {
 			testWidgets("No hyphenation max lines given", (WidgetTester tester) async {
 				await tester.pumpWidget(
