@@ -1,6 +1,10 @@
+## 0.1.3
+
+- Now soft hyphens are taken into consideration (#12)
+
 ## 0.1.2
 
-- Now if we have ellipsis disable hyphenation
+- Now if we have ellipsis disable hyphenation (#5)
 - Moved files around
 
 ## 0.1.1
