@@ -91,8 +91,13 @@ class AutoHyphenatingText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double getTextWidth(String text, TextStyle? style, TextDirection? direction, TextScaler? scaler) {
+
+		final TextStyle? localStyle = MediaQuery.boldTextOf(context)
+			? (titleStyle == null ? TextStyle(fontWeight: FontWeight.bold) : titleStyle.copyWith(fontWeight: FontWeight.bold))
+			: null;
+
       final TextPainter textPainter = TextPainter(
-        text: TextSpan(text: text, style: style),
+        text: TextSpan(text: text, style: localStyle ?? style),
         textScaler: scaler ?? MediaQuery.of(context).textScaler,
         maxLines: 1,
         textDirection: direction ?? Directionality.of(context),
