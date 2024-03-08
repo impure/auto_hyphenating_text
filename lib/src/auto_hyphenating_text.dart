@@ -92,9 +92,9 @@ class AutoHyphenatingText extends StatelessWidget {
   Widget build(BuildContext context) {
     double getTextWidth(String text, TextStyle? style, TextDirection? direction, TextScaler? scaler) {
 
-		final TextStyle? localStyle = MediaQuery.boldTextOf(context)
-			? (titleStyle == null ? TextStyle(fontWeight: FontWeight.bold) : titleStyle.copyWith(fontWeight: FontWeight.bold))
-			: null;
+      final TextStyle? localStyle = MediaQuery.boldTextOf(context)
+        ? (style == null ? const TextStyle(fontWeight: FontWeight.bold) : style.copyWith(fontWeight: FontWeight.bold))
+        : null;
 
       final TextPainter textPainter = TextPainter(
         text: TextSpan(text: text, style: localStyle ?? style),
