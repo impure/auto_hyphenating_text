@@ -134,7 +134,7 @@ class AutoHyphenatingText extends StatelessWidget {
       List<String> words = text.split(" ");
       List<InlineSpan> texts = <InlineSpan>[];
 
-      assert(globalLoader != null, "AutoHyphenatingText not initialized! Remember to call initHyphenation().");
+      assert(globalLoader != null, "AutoHyphenatingText not initialized! Remember to call initHyphenation(). This may require a full app restart.");
       final Hyphenator hyphenator = Hyphenator(
         resource: loader ?? globalLoader!,
         hyphenateSymbol: '_',
