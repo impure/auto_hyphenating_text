@@ -363,7 +363,7 @@ void main() async {
 	});
 
 	testWidgets("Throws assertion error if not initialized", (WidgetTester tester) async {
-		globalLoader = null;
+		hyphenator = null;
 		await tester.pumpWidget(
 			const MaterialApp(
 				home: Center(
