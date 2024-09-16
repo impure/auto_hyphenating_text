@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Initialization is now done all at once instead of once per widget. This shouldn’t change much unless you were passing in a custom `ResourceLoader`. It now has to be a `Hyphenator`.
+
 ## 0.2.0
 
 - Now using the new `textScaler` introduced in Flutter 3.16 (requires Flutter 3.16)
