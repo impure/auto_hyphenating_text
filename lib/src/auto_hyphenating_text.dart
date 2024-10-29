@@ -137,7 +137,21 @@ class AutoHyphenatingText extends StatelessWidget {
     }
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-      List<String> words = text.split(" ");
+      List<String> words = [];
+        List<String> linesSplitByNewline = text.split('\n');
+        List<int> newlineIdx = [];
+
+        for (final line in linesSplitByNewline) {
+          List<String> wordsInLine = line.split(' ');
+          if (wordsInLine.isNotEmpty) {
+            newlineIdx.add(words.length + wordsInLine.length - 1);
+          }
+          words.addAll(wordsInLine);
+        }
+
+        if (newlineIdx.isNotEmpty) {
+          newlineIdx.removeLast();
+        }
       List<InlineSpan> texts = <InlineSpan>[];
 
       assert(hyphenator != null || customHyphenator != null, "AutoHyphenatingText not initialized! Remember to call initHyphenation() or provide a custom hyphenator. This may require a full app restart.");
@@ -163,9 +177,19 @@ class AutoHyphenatingText extends StatelessWidget {
       for (int i = 0; i < words.length; i++) {
         double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, scaler);
 
+        void insertforcedNewLine() {
+          if (newlineIdx.contains(i)) {
+            texts.add(const TextSpan(text: "\n"));
+            lines++;
+            currentLineSpaceUsed = 0;
+            newlineIdx.remove(i);
+          }
+        }
+
         if (currentLineSpaceUsed + wordWidth < constraints.maxWidth - endBuffer) {
           texts.add(TextSpan(text: words[i]));
           currentLineSpaceUsed += wordWidth;
+          insertforcedNewLine();
         } else {
           final List<String> syllables = words[i].length == 1
               ? <String>[words[i]]
@@ -178,6 +202,7 @@ class AutoHyphenatingText extends StatelessWidget {
             if (currentLineSpaceUsed == 0) {
               texts.add(TextSpan(text: words[i]));
               currentLineSpaceUsed += wordWidth;
+              insertforcedNewLine();
             } else {
               i--;
               if (texts.last == const TextSpan(text: " ")) {
@@ -197,6 +222,9 @@ class AutoHyphenatingText extends StatelessWidget {
           } else {
             texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse, allowHyphen: allowHyphenation(lines))));
             words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
+            newlineIdx = newlineIdx.map((e) => e += 1).toList();
+            insertforcedNewLine();
+
             currentLineSpaceUsed = 0;
             lines++;
             if (effectiveMaxLines() != null && lines >= effectiveMaxLines()!) {
@@ -212,7 +240,9 @@ class AutoHyphenatingText extends StatelessWidget {
 
         if (i != words.length - 1) {
           if (currentLineSpaceUsed + singleSpaceWidth < constraints.maxWidth) {
-            texts.add(const TextSpan(text: " "));
+            if (texts.last != const TextSpan(text: "\n")) {
+              texts.add(const TextSpan(text: " "));
+            }
             currentLineSpaceUsed += singleSpaceWidth;
           } else {
             if (texts.last == const TextSpan(text: " ")) {
