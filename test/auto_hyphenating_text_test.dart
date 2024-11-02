@@ -460,4 +460,20 @@ void main() async {
 		expect(tester.getSemantics(find.byType(RichText)).label, "How much wood could a woodchuck chuck if a woodchuck could chuck wood?");
 		expect(textNode.label, tester.getSemantics(find.byType(RichText)).label);
 	});
+  testWidgets("Should not remove forced newlines", (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Center(
+          child: SizedBox(
+            width: 400,
+            child: AutoHyphenatingText(
+              "This is a veryLongText with a forced\nnewline and two consecutive\n\nnewlines",
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(getText(),
+        r"This is\na very‐\nLongText\nwith a\nforced\nnewline\nand two\nconsecu‐\ntive\n\nnew‐\nlines");
+  });
 }
