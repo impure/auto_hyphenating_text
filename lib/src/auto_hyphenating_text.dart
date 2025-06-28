@@ -274,6 +274,7 @@ class AutoHyphenatingText extends StatelessWidget {
           textAlign: textAlign ?? TextAlign.start,
           style: style,
           maxLines: maxLines,
+          cursorWidth: 0,
         );
       } else {
         richText = RichText(
