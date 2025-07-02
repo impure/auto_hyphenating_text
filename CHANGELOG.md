@@ -1,3 +1,8 @@
+## 0.3.1
+
+- Cursor now has 0 width when selectable text is enabled
+- Explicit newlines are now respected
+
 ## 0.3.0
 
 - Initialization is now done all at once instead of once per widget. This shouldn’t change much unless you were passing in a custom `ResourceLoader`. It now has to be a `Hyphenator`.
