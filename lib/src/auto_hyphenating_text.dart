@@ -186,7 +186,8 @@ class AutoHyphenatingText extends StatelessWidget {
           }
         }
 
-        if (currentLineSpaceUsed + wordWidth < constraints.maxWidth - endBuffer) {
+        final isLast = words.length - 1 == i;
+        if (currentLineSpaceUsed + wordWidth < constraints.maxWidth - (isLast ? 0 : endBuffer)) {
           texts.add(TextSpan(text: words[i]));
           currentLineSpaceUsed += wordWidth;
           insertforcedNewLine();
