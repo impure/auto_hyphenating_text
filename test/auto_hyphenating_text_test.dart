@@ -206,6 +206,23 @@ void main() async {
 			expect(getText(), "The CEO\\nmade some\\ncontrover‐\\nsial\\nstatements\\nyesterday.");
 		});
 
+		testWidgets("Ellipsis problem", (WidgetTester tester) async {
+
+			// No soft hyphen character, hyphenates normally
+			await tester.pumpWidget(
+				const MaterialApp(
+					home: OverflowBox(
+						maxWidth: 896,
+						child: AutoHyphenatingText(
+							"Carbohydrates",
+							style: TextStyle(overflow: TextOverflow.ellipsis, fontSize: 64),
+						),
+					),
+				),
+			);
+			expect(getText(), "Carbohydrates");
+		});
+
 		testWidgets("Soft hyphenation", (WidgetTester tester) async {
 
 			// No soft hyphen character, hyphenates normally
