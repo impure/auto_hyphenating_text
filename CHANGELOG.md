@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Fixed an issue where ellipsis would cause unnecessary hyphenation (#24)
+
 ## 0.3.1
 
 - Cursor now has 0 width when selectable text is enabled
