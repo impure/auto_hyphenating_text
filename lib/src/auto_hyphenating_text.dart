@@ -174,6 +174,27 @@ class AutoHyphenatingText extends StatelessWidget {
         }
       }
 
+      String remainingWord(String word, List<String> syllables, int indicesToMergeInclusive) {
+        if (!word.contains("­")) {
+          return mergeSyllablesBack(syllables, indicesToMergeInclusive);
+        }
+
+        int charactersToSkip = 0;
+        for (int i = 0; i <= indicesToMergeInclusive; i++) {
+          charactersToSkip += syllables[i].length;
+        }
+
+        int index = 0;
+        while (index < word.length && (charactersToSkip > 0 || word[index] == "­")) {
+          if (word[index] != "­") {
+            charactersToSkip--;
+          }
+          index++;
+        }
+
+        return word.substring(index);
+      }
+
       for (int i = 0; i < words.length; i++) {
         double wordWidth = getTextWidth(words[i], effectiveTextStyle, textDirection, scaler);
 
@@ -222,7 +243,7 @@ class AutoHyphenatingText extends StatelessWidget {
             continue;
           } else {
             texts.add(TextSpan(text: mergeSyllablesFront(syllables, syllableToUse, allowHyphen: allowHyphenation(lines))));
-            words.insert(i + 1, mergeSyllablesBack(syllables, syllableToUse));
+            words.insert(i + 1, remainingWord(words[i], syllables, syllableToUse));
             newlineIdx = newlineIdx.map((e) => e += 1).toList();
             insertforcedNewLine();
 

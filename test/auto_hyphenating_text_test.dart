@@ -424,6 +424,20 @@ void main() async {
 		expect(getText(), "How much\\nwood\\ncould a\\nwood‐\\nchuck\\nchuck if\\na wood‐\\nchuck\\ncould\\nchuck\\nwood?");
 	});
 
+	testWidgets("Small Lines, Should Break At Every Soft Hyphen", (WidgetTester tester) async {
+		await tester.pumpWidget(
+			const MaterialApp(
+				home: Center(
+					child: SizedBox(
+						width: 250,
+						child: AutoHyphenatingText("Ylä­maan­karja"),
+					),
+				),
+			),
+		);
+		expect(getText(), "Ylä‐\\nmaan‐\\nkarja");
+	});
+
 	testWidgets("No Extra Space At The End", (WidgetTester tester) async {
 		await tester.pumpWidget(
 			const MaterialApp(
